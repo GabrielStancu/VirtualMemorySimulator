@@ -18,7 +18,7 @@ namespace Machine
         /// </summary>
         /// <param name="commands"></param>
         /// <returns></returns>
-        internal async static Task Run(List<Command> commands)
+        internal async static Task Run(IReadOnlyList<Command> commands)
         {
             Task<bool>[] cmds = new Task<bool>[commands.Count];
 
@@ -74,6 +74,7 @@ namespace Machine
         {
             page.Requested = command.ProcessId;
 
+            Counter.IncrementPageFaults();
             Task<bool> loadPageTask = OS.LoadPage(page);
             loadPageTask.Start();
             await loadPageTask;
@@ -84,7 +85,8 @@ namespace Machine
 
         /// <summary>
         /// Method that handles the actual read / write command.
-        /// If the command is write, it simulates the handling by setting the dirty bit and the writing by a sleep of 1 second.
+        /// If the command is write, it simulates the handling by asking the OS to save changes to disk (if page is dirty)
+        /// and sets the dirty bit and simulates the writing by the sleep unit of OS.DelayTime second.
         /// The access time is updated to maintain the priority queue for swapping.
         /// </summary>
         /// <param name="command">Represents the received command (read / write).</param>
@@ -93,6 +95,11 @@ namespace Machine
         {
             if (command.AccessType == PageAccessType.Write)
             {
+                if(page.IsDirty)
+                {
+                    await OS.SavePageChangesToDisk(page);
+                }
+
                 page.IsDirty = true;
                 await OS.SimulateHandling();
             }

@@ -2,7 +2,7 @@
 {
     internal enum PageAccessType
     {
-        Read, 
+        Read,
         Write
     }
 }

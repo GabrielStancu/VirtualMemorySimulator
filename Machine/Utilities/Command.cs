@@ -26,10 +26,12 @@ namespace Machine.Utilities
         /// The index of the page to be accessed in the page table.
         /// </summary>
         internal int PageIndex { get; }
+
         /// <summary>
         /// The process requesting the page access.
         /// </summary>
         internal int ProcessId { get; }
+
         /// <summary>
         /// The operation type: read / write.
         /// </summary>
