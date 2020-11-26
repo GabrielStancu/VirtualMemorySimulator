@@ -1,4 +1,5 @@
 ﻿using Machine.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,37 +12,6 @@ namespace Machine
     /// </summary>
     internal class MMU
     {
-        /// <summary>
-        /// Method used by MMU to simulate the access of a page.
-        /// </summary>
-        /// <param name="command">The command to be processed by the MMU.</param>
-        /// <returns>Returns true if the read / write was successfull, false if the page index is not valid or the page does not belong to the process.</returns>
-        private async static Task<bool> AccessPage(Command command)
-        {
-            //todo: send and receive notifications to/from the OS
-            Page? page = PageTable.GetPageByIndex(command.PageIndex);
-            Counter.IncrementRamAccesses(); //1 RAM access 
-
-            if (page != null && page.ProcessId == command.ProcessId)
-            {
-                if (command.AccessType == PageAccessType.Write)
-                {
-                    page.IsDirty = true;
-                    await Task.Delay(1000); //simulate the writing by sleeping 1 second
-                }
-                
-                Counter.IncrementRamAccesses(); //1 RAM access
-                return true;
-            }
-            else if (page != null && page.IsValid)
-            {
-                //todo: write pid in requested, notify OS to load the page (=> sleep(1s))
-                //when done, OS notifies MMU
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Asynchronous method that assigns each request to a Task object.
         /// Each Task is run. If the returned value is false => ~Segmentation Fault, notify the OS to kill the process.
@@ -64,5 +34,70 @@ namespace Machine
                 }
             }
         }
+
+        /// <summary>
+        /// Method used by MMU to simulate the access of a page.
+        /// First it checks whether the page exists in RAM and it belongs to the calling process, 
+        /// then it checks whether the page is loaded. If not, the page is loaded then the read / write command is executed. 
+        /// </summary>
+        /// <param name="command">The command to be processed by the MMU.</param>
+        /// <returns>Returns true if the read / write was successfull, false if the page index is not valid or the page does not belong to the process.</returns>
+        private async static Task<bool> AccessPage(Command command)
+        {
+            Page? page = PageTable.GetPageByIndex(command.PageIndex);
+            Counter.IncrementRamAccesses(); //1 RAM access 
+
+            if (page != null && page.ProcessId == command.ProcessId)
+            {
+                if (!page.IsValid)
+                {
+                    await HandlePageRequested(command, page);
+                }
+
+                await HandleReadWriteCommand(command, page);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Method that handles the load of a page from disk to RAM. 
+        /// Sets the Requested field of the page with the process' pid and calls the OS to load it.
+        /// After the OS loaded it, the MMU is notified and resets the Requested field.
+        /// The access time is updated, to maintain the priority queue for page swapping.
+        /// </summary>
+        /// <param name="command">Represents the received command (read / write).</param>
+        /// <param name="page">The page for which the request was made.</param>
+        private async static Task HandlePageRequested(Command command, Page page)
+        {
+            page.Requested = command.ProcessId;
+
+            Task<bool> loadPageTask = OS.LoadPage(page);
+            loadPageTask.Start();
+            await loadPageTask;
+
+            page.Requested = 0;
+            page.LastTimeAccessed = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Method that handles the actual read / write command.
+        /// If the command is write, it simulates the handling by setting the dirty bit and the writing by a sleep of 1 second.
+        /// The access time is updated to maintain the priority queue for swapping.
+        /// </summary>
+        /// <param name="command">Represents the received command (read / write).</param>
+        /// <param name="page">The page for which the request was made.</param>
+        private async static Task HandleReadWriteCommand(Command command, Page page)
+        {
+            if (command.AccessType == PageAccessType.Write)
+            {
+                page.IsDirty = true;
+                await OS.SimulateHandling();
+            }
+            page.LastTimeAccessed = DateTime.Now;
+            Counter.IncrementRamAccesses(); //1 RAM access
+        } 
     }
 }

@@ -8,6 +8,7 @@ namespace Machine
 #nullable enable
     public static class OS
     {
+        public static bool IsActive { get; private set; }
         internal async static Task<bool> SavePageChangesToDisk(int pageIndex)
         {
             Page? page = PageTable.GetPageByIndex(pageIndex);
@@ -23,11 +24,21 @@ namespace Machine
             return false;
         }
 
-        //internal async static Task<bool> LoadPage()
+        internal async static Task<bool> LoadPage(Page page)
+        {
+            return true;
+        }
 
         internal static void KillProcess(int processId)
         {
             //todo
+        }
+
+        internal static async Task SimulateHandling()
+        {
+            IsActive = false;
+            await Task.Delay(1000);
+            IsActive = true;
         }
     }
 }
