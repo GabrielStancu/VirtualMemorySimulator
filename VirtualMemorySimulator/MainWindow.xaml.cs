@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Machine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace VirtualMemorySimulator
         public MainWindow()
         {
             InitializeComponent();
+            Simulate();
+        }
+
+        private async void Simulate()
+        {
+            await OS.Run();
         }
     }
 }

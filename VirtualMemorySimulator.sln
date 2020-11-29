@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualMemorySimulator", "VirtualMemorySimulator\VirtualMemorySimulator.csproj", "{5B744A0A-5030-438F-8E8E-E614DFF2EA10}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{F9D26311-18DC-4FB2-951C-0814324D169F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine", "Machine\Machine.csproj", "{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine", "Machine\Machine.csproj", "{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{5B744A0A-5030-438F-8E8E-E614DFF2EA10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B744A0A-5030-438F-8E8E-E614DFF2EA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B744A0A-5030-438F-8E8E-E614DFF2EA10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9D26311-18DC-4FB2-951C-0814324D169F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9D26311-18DC-4FB2-951C-0814324D169F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9D26311-18DC-4FB2-951C-0814324D169F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9D26311-18DC-4FB2-951C-0814324D169F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}.Release|Any CPU.ActiveCfg = Release|Any CPU

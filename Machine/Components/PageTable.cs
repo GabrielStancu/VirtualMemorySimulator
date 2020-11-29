@@ -3,35 +3,31 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-#nullable enable
 namespace Machine
 {
     /// <summary>
-    /// A static class representing the page table of the RAM. 
-    /// Our design presents a singular page table for the whole RAM.
+    /// Class representing the page table of a process. 
+    /// Our design presents a page table / running process.
     /// </summary>
-    internal static class PageTable
+    public class PageTable
     {
-        internal static List<Page>? Pages { get; set; }
+        public List<Page> Pages { get; private set; }
 
-        internal static void LoadPages(int pageTableSize)
+        internal PageTable(int pageTableSize)
         {
-            if(Pages == null)
-            {
-                Pages = new List<Page>(pageTableSize);
+            Pages = new List<Page>(pageTableSize);
+            LoadPages(pageTableSize);
+        }
 
-                for (int index = 0; index < pageTableSize; index++)
-                {
-                    Pages[index] = new Page(index);
-                }
+        private void LoadPages(int pageTableSize)
+        {
+            for(int index = 0; index < pageTableSize; index++)
+            {
+                Pages.Add(new Page(index));
             }
         }
 
-        internal static Page? GetPageByIndex(int pageIndex)
-            => (Pages == null) ? null : Pages.Find(p => p.PageIndex == pageIndex);
-
-        
-
-        
+        internal Page GetPageByIndex(int pageIndex)
+            => Pages.Find(p => p.PageIndex == pageIndex);
     }
 }

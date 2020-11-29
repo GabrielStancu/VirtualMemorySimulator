@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Machine.Components;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace Machine.Utilities
     /// <summary>
     /// Class that generates the commands for the simulation based on the given parameters to the OS Run method.
     /// </summary>
-    internal class CommandsGenerator
+    internal class Generator
     {
         /// <summary>
         /// A pseudo random number generator for the command type, process id and page table index.
@@ -18,7 +19,7 @@ namespace Machine.Utilities
         /// Generates a list of random commands for the simulation.
         /// </summary>
         /// <returns>The list of randomly-generated commands.</returns>
-        internal IReadOnlyList<Command> Generate()
+        internal IReadOnlyList<Command> GenerateCommands()
         {
             List<Command> commands = new List<Command>(OS.CommandsCount);
 
@@ -37,6 +38,18 @@ namespace Machine.Utilities
             return commands.AsReadOnly();
         }
 
+        internal List<Process> GenerateProcesses()
+        {
+            List<Process> processes = new List<Process>(OS.ProcessCount);
+
+            for (int pid = 0; pid < OS.ProcessCount; pid++)
+            {
+                processes.Add(new Process(pid, Generate(1, OS.MaxPagesPerProcess)));
+            }
+
+            return processes;
+        }
+
         /// <summary>
         /// Generates one command to be appended to the simulation's commands list.
         /// </summary>
@@ -47,13 +60,15 @@ namespace Machine.Utilities
         {
             //generate random operation: read / write 
             PageAccessType op = GenerateOperationType();
-            //generate random page number (0..OS.PageTableSize)
-            int pageIndex = Generate(0, OS.PageTableSize);
+            
             //pid = -1 => generate random pid (0..OS.ProcessCount) else use that pid 
             if (pid == -1)
             {
                 pid = Generate(0, OS.ProcessCount);
             }
+
+            //generate random page number (0..Process.PageTableSize)
+            int pageIndex = Generate(0, OS.Processes[pid].PageTableSize);
 
             return new Command(pageIndex, pid, op);
         }

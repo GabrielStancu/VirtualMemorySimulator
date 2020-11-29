@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace Machine
 {
-#nullable enable
     /// <summary>
     /// Class used to simulate the memory management unit (MMU).
     /// Performs accesses on the page table and counts the accesses of memory (RAM and Disk).
@@ -13,25 +12,20 @@ namespace Machine
     internal class MMU
     {
         /// <summary>
-        /// Asynchronous method that assigns each request to a Task object.
-        /// Each Task is run. If the returned value is false => ~Segmentation Fault, notify the OS to kill the process.
+        /// Asynchronous method that assigns each request to a Task object. Each Task is run.
         /// </summary>
         /// <param name="commands"></param>
         /// <returns></returns>
         internal async static Task Run(IReadOnlyList<Command> commands)
         {
-            Task<bool>[] cmds = new Task<bool>[commands.Count];
+            Task[] cmds = new Task[commands.Count];
 
             for (int index = 0; index < commands.Count; index++)
             {
                 cmds[index] = AccessPage(commands[index]);
                 cmds[index].Start();
 
-                bool succeeded = await cmds[index];
-                if (succeeded == false)
-                {
-                    OS.KillProcess(commands[index].ProcessId);
-                }
+                await cmds[index];
             }
         }
 
@@ -42,24 +36,17 @@ namespace Machine
         /// </summary>
         /// <param name="command">The command to be processed by the MMU.</param>
         /// <returns>Returns true if the read / write was successfull, false if the page index is not valid or the page does not belong to the process.</returns>
-        private async static Task<bool> AccessPage(Command command)
+        private async static Task AccessPage(Command command)
         {
-            Page? page = PageTable.GetPageByIndex(command.PageIndex);
+            Page page = OS.Processes[command.ProcessId].PageTable.GetPageByIndex(command.PageIndex);
             Counter.IncrementRamAccesses(); //1 RAM access 
 
-            if (page != null && page.ProcessId == command.ProcessId)
+            if (!page.IsValid)
             {
-                if (!page.IsValid)
-                {
-                    await HandlePageRequested(command, page);
-                }
-
-                await HandleReadWriteCommand(command, page);
-
-                return true;
+                await HandlePageRequested(command, page);
             }
-
-            return false;
+ 
+            await HandleReadWriteCommand(command, page);
         }
 
         /// <summary>
@@ -75,12 +62,9 @@ namespace Machine
             page.Requested = command.ProcessId;
 
             Counter.IncrementPageFaults();
-            Task<bool> loadPageTask = OS.LoadPage(page);
+            Task loadPageTask = OS.LoadPage();
             loadPageTask.Start();
             await loadPageTask;
-
-            page.Requested = 0;
-            page.LastTimeAccessed = DateTime.Now;
         }
 
         /// <summary>
@@ -103,6 +87,7 @@ namespace Machine
                 page.IsDirty = true;
                 await OS.SimulateHandling();
             }
+
             page.LastTimeAccessed = DateTime.Now;
             Counter.IncrementRamAccesses(); //1 RAM access
         } 

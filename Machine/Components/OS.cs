@@ -1,4 +1,5 @@
-﻿using Machine.Utilities;
+﻿using Machine.Components;
+using Machine.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,62 +7,67 @@ using System.Threading.Tasks;
 
 namespace Machine
 {
-#nullable enable
     public static class OS
     {
         public static bool IsActive { get; private set; }
-        internal static int ProcessCount { get; private set; } = 8;
-        internal static int CommandsCount { get; private set; } = 8;
-        internal static int PageTableSize { get; private set; } = 32;
-        public static int DelayTime { get; private set; } = 1000;
+        internal static int ProcessCount { get; private set; }
+        internal static int CommandsCount { get; private set; }
+        internal static int MaxPagesPerProcess { get; private set; }
+        internal static int RamFrames { get; private set; }
+        internal static int DelayTime { get; private set; }
 
-        private static List<bool> RunningProcesses = new List<bool>(ProcessCount);
-
-        public static async Task Run(int processCount, int commandsCount, int pageTableSize, int delayTime)
+        internal static List<Process> Processes;
+        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 32, int maxPagesPerProcess = 8, int delayTime = 1000)
         {
+            IsActive = true;
             ProcessCount = processCount;
             CommandsCount = commandsCount;
-            PageTableSize = pageTableSize;
+            RamFrames = ramFrames;
+            MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
 
-            PageTable.LoadPages(PageTableSize);
+            Generator generator = new Generator();
+            Processes = generator.GenerateProcesses();
 
-            for (int pid = 0; pid < ProcessCount; pid++)
-            {
-                RunningProcesses[pid] = true;
-            }
-
-            CommandsGenerator generator = new CommandsGenerator();
-            IReadOnlyList<Command> commands = generator.Generate();
+            IReadOnlyList<Command> commands = generator.GenerateCommands();
             await MMU.Run(commands);
+            IsActive = false;
         }
-        internal async static Task<bool> SavePageChangesToDisk(Page page)
+        internal async static Task SavePageChangesToDisk(Page page)
         {
-            if (page != null)
+            if (page.IsDirty)
             {
-                if (page.IsDirty)
-                {
-                    page.IsDirty = false;
-                    await SimulateHandling();
-                    Counter.IncrementDiskAccesses(); //1 Disk access               
-                }
-
-                return true;
+                page.IsDirty = false;
+                await SimulateHandling();
+                Counter.IncrementDiskAccesses(); //1 Disk access               
             }
-
-            return false;
         }
 
-        //todo: should we implement a page table for each process?
-        internal static async Task<bool> LoadPage(Page page)
+        internal static async Task LoadPage()
         {
-            await Task.Delay(DelayTime);
-            return true;
-        }
+            foreach (var process in Processes)
+            {
+                foreach (var page in process.PageTable.Pages)
+                {
+                    if(page.Requested != 0)
+                    {
+                        if(RamFrames > 0)
+                        {
+                            RamFrames--;
+                        }
+                        else
+                        {
+                            await SwapPage();
+                        }
 
-        internal static void KillProcess(int processId)
-        {
-            RunningProcesses[processId] = false;
+                        await OS.SimulateHandling();
+
+                        page.Requested = 0;
+                        page.IsValid = true;
+                        page.LastTimeAccessed = DateTime.Now;
+                    }
+                }
+            }
         }
 
         internal static async Task SimulateHandling()
@@ -71,9 +77,35 @@ namespace Machine
             IsActive = true;
         }
 
-        public static IReadOnlyList<bool> GetRunningProcesses()
+        public static IReadOnlyList<Process> GetRunningProcesses()
         {
-            return RunningProcesses.AsReadOnly();
+            return Processes.AsReadOnly();
+        }
+
+        private async static Task SwapPage()
+        {
+            DateTime lastAccess = DateTime.Now;
+            Page pageToSwap = new Page(-1);
+
+            foreach(var process in Processes)
+            {
+                foreach (var page in process.PageTable.Pages)
+                {
+                    if (page.LastTimeAccessed < lastAccess && page.IsValid)
+                    {
+                        pageToSwap = page;
+                        lastAccess = page.LastTimeAccessed;
+                    }
+                }
+            }
+
+            if(pageToSwap.IsDirty)
+            {
+                await SavePageChangesToDisk(pageToSwap);
+                pageToSwap.IsDirty = false;
+            }
+
+            pageToSwap.IsValid = false;  
         }
     }
 }
