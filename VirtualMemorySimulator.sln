@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualMemorySimulator", "VirtualMemorySimulator\VirtualMemorySimulator.csproj", "{5B744A0A-5030-438F-8E8E-E614DFF2EA10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743} = {7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine", "Machine\Machine.csproj", "{7FC7C01A-FD4C-44A0-85E5-C79AF01E9743}"
 EndProject

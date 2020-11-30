@@ -12,20 +12,14 @@ namespace Machine
     internal class MMU
     {
         /// <summary>
-        /// Asynchronous method that assigns each request to a Task object. Each Task is run.
+        /// Asynchronous method that runs each command on a separate Task / thread.
         /// </summary>
-        /// <param name="commands"></param>
-        /// <returns></returns>
+        /// <param name="commands">The commands to be run during the simulation.</param>
         internal async static Task Run(IReadOnlyList<Command> commands)
         {
-            Task[] cmds = new Task[commands.Count];
-
             for (int index = 0; index < commands.Count; index++)
             {
-                cmds[index] = AccessPage(commands[index]);
-                cmds[index].Start();
-
-                await cmds[index];
+                await AccessPage(commands[index]);
             }
         }
 
@@ -35,7 +29,6 @@ namespace Machine
         /// then it checks whether the page is loaded. If not, the page is loaded then the read / write command is executed. 
         /// </summary>
         /// <param name="command">The command to be processed by the MMU.</param>
-        /// <returns>Returns true if the read / write was successfull, false if the page index is not valid or the page does not belong to the process.</returns>
         private async static Task AccessPage(Command command)
         {
             Page page = OS.Processes[command.ProcessId].PageTable.GetPageByIndex(command.PageIndex);
@@ -60,11 +53,8 @@ namespace Machine
         private async static Task HandlePageRequested(Command command, Page page)
         {
             page.Requested = command.ProcessId;
-
             Counter.IncrementPageFaults();
-            Task loadPageTask = OS.LoadPage();
-            loadPageTask.Start();
-            await loadPageTask;
+            await OS.LoadPage(page);
         }
 
         /// <summary>

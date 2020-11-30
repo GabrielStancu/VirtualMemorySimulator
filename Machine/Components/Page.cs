@@ -7,7 +7,7 @@ namespace Machine
     /// <summary>
     /// A class representing the entry (one page) from the page table.
     /// </summary>
-    public class Page// : IComparer<Page>
+    public class Page
     {
         /// <summary>
         /// Initializez the page at the beginning of the simulation. 
@@ -19,7 +19,7 @@ namespace Machine
             IsValid = false;
             PageIndex = index;
             IsDirty = false;
-            Requested = 0;
+            Requested = -1;
             LastTimeAccessed = DateTime.Now;    
         }
         /// <summary>
@@ -45,13 +45,5 @@ namespace Machine
         /// If the page table is full, the page whose access time is the lowest is swapped.
         /// </summary>
         public DateTime LastTimeAccessed { get; internal set; }
-
-        //public int Compare(Page p1, Page p2)
-        //{
-        //    DateTime dt1 = p1.LastTimeAccessed;
-        //    DateTime dt2 = p2.LastTimeAccessed;
-
-        //    return dt1.CompareTo(dt2);
-        //}
     }
 }

@@ -38,6 +38,10 @@ namespace Machine.Utilities
             return commands.AsReadOnly();
         }
 
+        /// <summary>
+        /// Generates the processes that will be run during our simulation.
+        /// </summary>
+        /// <returns>The list of processes to be run during the simulation.</returns>
         internal List<Process> GenerateProcesses()
         {
             List<Process> processes = new List<Process>(OS.ProcessCount);
