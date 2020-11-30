@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Machine\Machine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Gauge\" />
+  </ItemGroup>
+
 </Project>

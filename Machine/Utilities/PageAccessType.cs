@@ -3,7 +3,7 @@
     /// <summary>
     /// Enum containing the possible command types: Read or Write.
     /// </summary>
-    internal enum PageAccessType
+    public enum PageAccessType
     {
         Read,
         Write

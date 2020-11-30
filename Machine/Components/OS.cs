@@ -2,7 +2,6 @@
 using Machine.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Machine
@@ -42,8 +41,12 @@ namespace Machine
         /// <summary>
         /// The list of running processes in the simulation environment.
         /// </summary>
-
         internal static List<Process> Processes;
+
+        /// <summary>
+        /// The list of commands to be executed during the simulation.
+        /// </summary>
+        internal static IReadOnlyList<Command> Commands;
         /// <summary>
         /// The initializing method of the OS. Can be called from outside the project to start the simulation.
         /// </summary>
@@ -64,8 +67,8 @@ namespace Machine
             Generator generator = new Generator();
             Processes = generator.GenerateProcesses();
 
-            IReadOnlyList<Command> commands = generator.GenerateCommands();
-            await MMU.Run(commands);
+            Commands = generator.GenerateCommands();
+            await MMU.Run(Commands);
             IsActive = false;
         }
 
@@ -124,9 +127,14 @@ namespace Machine
         /// </summary>
         /// <returns>A read-only list of Process objects, containing information about the running programs in the system.</returns>
         public static IReadOnlyList<Process> GetRunningProcesses()
-        {
-            return Processes.AsReadOnly();
-        }
+            => Processes.AsReadOnly();
+
+        /// <summary>
+        /// Returns data about the commands run during the simulation.
+        /// </summary>
+        /// <returns>A read-only list of Command objects, containing information about the commands executed during the simulation.</returns>
+        public static IReadOnlyList<Command> GetCommands()
+            => Commands;
 
         /// <summary>
         /// Simulates asynchronously the process of swapping a page when the RAM is fully loaded and another page needs to be loaded.
