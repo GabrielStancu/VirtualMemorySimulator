@@ -3,6 +3,7 @@ using Machine.Components;
 using Machine.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,10 +20,12 @@ namespace VirtualMemorySimulator
     {
         private static Task _simulation;
         private static int _processCount = 8;
+        private ObservableCollection<Machine.Page> ProcessPageTable;
         public MainWindow()
         {
-            InitializeComponent();    
+            InitializeComponent();     
             this.RamGauge.DataContext = new GaugeViewModel();
+            SetColumnNames();
         }
 
         private async void Simulate()
@@ -51,9 +54,12 @@ namespace VirtualMemorySimulator
 
         private void GetProcessPageTableInfo(string processName)
         {
-            int pid = Int32.Parse(processName[1].ToString()) - 1;
+            int pid = Int32.Parse(processName[1].ToString());
             PageTable pt = OS.GetRunningProcesses()[pid].PageTable;
-            dgProcessPageTable.ItemsSource = pt.GetPageTableInfo();
+            ProcessPageTable = new ObservableCollection<Machine.Page>(pt.GetPageTableInfo());
+            dgProcessPageTable.Columns.Clear();
+            dgProcessPageTable.ItemsSource = ProcessPageTable;
+            SetColumnNames();
             SwitchProcessBorderColor(processName);
         }
 
@@ -79,7 +85,7 @@ namespace VirtualMemorySimulator
         private void OnStartSimulationClicked(object sender, RoutedEventArgs e)
         {
             Simulate();
-            GetProcessPageTableInfo("p1");
+            GetProcessPageTableInfo("p0");
             GetProcessesDetails();
         }
 
@@ -101,8 +107,16 @@ namespace VirtualMemorySimulator
             for(int pid = 0; pid < _processCount; pid++)
             {
                 pageTableSizeLabels[pid].Content = processes[pid].PageTableSize;
-            }
-            
+            }  
+        }
+
+        private void SetColumnNames()
+        {
+            dgProcessPageTable.Columns[0].Header = "Is Valid";
+            dgProcessPageTable.Columns[1].Header = "Page Index";
+            dgProcessPageTable.Columns[2].Header = "Is Dirty";
+            dgProcessPageTable.Columns[3].Header = "Requested";
+            dgProcessPageTable.Columns[4].Header = "Last Access";
         }
     }
 }

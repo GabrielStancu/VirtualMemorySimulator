@@ -72,29 +72,29 @@
                     </Style>
                 </Grid.Resources>
 
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p1" Grid.Column="0">
-                    <Label Style="{StaticResource ProcessLabelStyle}"  Content="P1"/>
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p0" Grid.Column="0">
+                    <Label Style="{StaticResource ProcessLabelStyle}"  Content="P0"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p2" Grid.Column="1">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p1" Grid.Column="1">
+                    <Label Style="{StaticResource ProcessLabelStyle}" Content="P1"/>
+                </Border>
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p2" Grid.Column="2">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P2"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p3" Grid.Column="2">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p3" Grid.Column="3" >
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P3"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p4" Grid.Column="3" >
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p4" Grid.Column="4">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P4"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p5" Grid.Column="4">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p5" Grid.Column="5">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P5"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p6" Grid.Column="5">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p6" Grid.Column="6">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P6"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p7" Grid.Column="6">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p7" Grid.Column="7">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P7"/>
-                </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p8" Grid.Column="7">
-                    <Label Style="{StaticResource ProcessLabelStyle}" Content="P8"/>
                 </Border>
 
                 <Grid Grid.Row="1" Grid.Column="0" Margin="5">
@@ -304,51 +304,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid.Resources>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="Height" Value="50" />
-                    <Setter Property="SeparatorBrush" Value="DarkRed" />
-                    <Setter Property="FontWeight" Value="Black"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="FontFamily" Value="Lucida Sans"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                                <Grid>
-                                    <Border x:Name="columnHeaderBorder"
-		                                    BorderThickness="1"
-		                                    Padding="3,0,3,0">
-                                        <Border.BorderBrush>
-                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                                <GradientStop Offset="0" Color="Black" />
-                                                <GradientStop Offset="1" Color="Black" />
-                                            </LinearGradientBrush>
-                                        </Border.BorderBrush>
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                                <GradientStop Offset="0" Color="CadetBlue" />
-                                                <GradientStop Offset="1" Color="#3d5a80" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-			                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-				                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="Background" Value="White" />
-                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
-                    <Setter Property="Height" Value="43"/>
-                </Style>
-            </Grid.Resources>
-
-            <DataGrid x:Name="dgProcessPageTable"/>
+            <DataGrid x:Name="dgProcessPageTable" MaxWidth="692">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Width="*"/>
+                    <DataGridTextColumn Width="*"/>
+                    <DataGridCheckBoxColumn Width="*"/>
+                    <DataGridTextColumn Width="*"/>
+                    <DataGridTextColumn Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
             <Border Grid.Column="1" BorderBrush="Black" BorderThickness="2">
                 <Grid >

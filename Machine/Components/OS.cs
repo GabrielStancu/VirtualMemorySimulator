@@ -2,6 +2,7 @@
 using Machine.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Machine
@@ -107,7 +108,7 @@ namespace Machine
 
                 page.Requested = -1;
                 page.IsValid = true;
-                page.LastTimeAccessed = DateTime.Now;
+                page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             }
         }
 
@@ -141,14 +142,14 @@ namespace Machine
         /// </summary>
         private async static Task SwapPage()
         {
-            DateTime lastAccess = DateTime.Now;
+            string lastAccess = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             Page pageToSwap = new Page(-1);
 
             foreach(var process in Processes)
             {
                 foreach (var page in process.PageTable.Pages)
                 {
-                    if (page.LastTimeAccessed < lastAccess && page.IsValid)
+                    if (page.LastTimeAccessed.CompareTo(lastAccess) < 0 && page.IsValid)
                     {
                         pageToSwap = page;
                         lastAccess = page.LastTimeAccessed;

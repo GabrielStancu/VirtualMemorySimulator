@@ -1,6 +1,7 @@
 ﻿using Machine.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Machine
@@ -20,6 +21,7 @@ namespace Machine
             for (int index = 0; index < commands.Count; index++)
             {
                 await AccessPage(commands[index]);
+                commands[index].Completed = true;
             }
         }
 
@@ -78,7 +80,7 @@ namespace Machine
                 await OS.SimulateHandling();
             }
 
-            page.LastTimeAccessed = DateTime.Now;
+            page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             Counter.IncrementRamAccesses(); //1 RAM access
         } 
     }
