@@ -7,6 +7,49 @@
         mc:Ignorable="d"
         Title="CommandsInfo" Height="450" Width="300" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <Grid Margin="10" MaxHeight="790">
+        <Grid.Resources>
+            <Style TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="SeparatorBrush" Value="DarkRed" />
+                <Setter Property="FontWeight" Value="Black"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontFamily" Value="Lucida Sans"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                            <Grid>
+                                <Border x:Name="columnHeaderBorder"
+		                                    BorderThickness="1"
+		                                    Padding="3,0,3,0">
+                                    <Border.BorderBrush>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Offset="0" Color="Black" />
+                                            <GradientStop Offset="1" Color="Black" />
+                                        </LinearGradientBrush>
+                                    </Border.BorderBrush>
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Offset="0" Color="CadetBlue" />
+                                            <GradientStop Offset="1" Color="#3d5a80" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+			                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+				                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="{x:Type DataGridRow}">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+                <Setter Property="Height" Value="43"/>
+            </Style>
+        </Grid.Resources>
         <DataGrid Name="dgCmds"></DataGrid>
     </Grid>
 </Window>

@@ -8,7 +8,7 @@
         Height="850" Width="1245" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
     <StackPanel>
-        <Grid Background="#fdfcdc">
+        <Grid x:Name="HeaderGrid" Background="#c1c1c1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -81,7 +81,7 @@
                 <Border Style="{StaticResource ProcessBorderStyle}" Name="p3" Grid.Column="2">
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P3"/>
                 </Border>
-                <Border Style="{StaticResource ProcessBorderStyle}" Name="p4" Grid.Column="3" Background="#4361ee">
+                <Border Style="{StaticResource ProcessBorderStyle}" Name="p4" Grid.Column="3" >
                     <Label Style="{StaticResource ProcessLabelStyle}" Content="P4"/>
                 </Border>
                 <Border Style="{StaticResource ProcessBorderStyle}" Name="p5" Grid.Column="4">
@@ -110,7 +110,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="8"/>
+                        <Label x:Name="p1CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -118,7 +118,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="5"/>
+                        <Label x:Name="p1PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -135,7 +135,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="6"/>
+                        <Label x:Name="p2CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -143,7 +143,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="3"/>
+                        <Label x:Name="p2PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -160,7 +160,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="3"/>
+                    <Label x:Name="p3CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -168,7 +168,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="4"/>
+                        <Label x:Name="p3PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -185,7 +185,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="9"/>
+                        <Label x:Name="p4CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -193,7 +193,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="8"/>
+                        <Label x:Name="p4PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -210,7 +210,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="2"/>
+                        <Label x:Name="p5CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -218,7 +218,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="2"/>
+                        <Label x:Name="p5PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -235,7 +235,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="7"/>
+                        <Label x:Name="p6CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -243,7 +243,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="5"/>
+                        <Label x:Name="p6PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -260,7 +260,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="10"/>
+                        <Label x:Name="p7CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -268,7 +268,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="7"/>
+                        <Label x:Name="p7PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
 
@@ -285,7 +285,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="1">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="3"/>
+                        <Label x:Name="p8CommandsLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoHeaderStyle}" Grid.Row="2">
@@ -293,7 +293,7 @@
                     </Border>
 
                     <Border Style="{StaticResource ProcessBorderInfoValueStyle}" Grid.Row="3">
-                        <Label Style="{StaticResource ProcessLabelInfoValueStyle}" Content="2"/>
+                        <Label x:Name="p8PageTableSizeLabel" Style="{StaticResource ProcessLabelInfoValueStyle}" Content="0"/>
                     </Border>
                 </Grid>
             </Grid>
@@ -304,214 +304,51 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.1*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.1*"/>
-                    <ColumnDefinition Width="1.1*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1.5*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Height" Value="50" />
+                    <Setter Property="SeparatorBrush" Value="DarkRed" />
+                    <Setter Property="FontWeight" Value="Black"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontFamily" Value="Lucida Sans"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                <Grid>
+                                    <Border x:Name="columnHeaderBorder"
+		                                    BorderThickness="1"
+		                                    Padding="3,0,3,0">
+                                        <Border.BorderBrush>
+                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                <GradientStop Offset="0" Color="Black" />
+                                                <GradientStop Offset="1" Color="Black" />
+                                            </LinearGradientBrush>
+                                        </Border.BorderBrush>
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                <GradientStop Offset="0" Color="CadetBlue" />
+                                                <GradientStop Offset="1" Color="#3d5a80" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+			                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+				                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-                <Grid.Resources>
-                    <Style x:Key="HeaderBorderStyle" TargetType="Border">
-                        <Setter Property="Background" Value="#3d5a80"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="Grid.Row" Value="0"/>
-                    </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+                    <Setter Property="Height" Value="43"/>
+                </Style>
+            </Grid.Resources>
 
-                    <Style x:Key="HeaderLabelStyle" TargetType="Label">
-                        <Setter Property="FontSize" Value="26"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="Height" Value="70"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    </Style>
-
-                    <Style x:Key="RowBorderStyle" TargetType="Border">
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="IsEnabled" Value="False"/>
-                    </Style>
-
-                    <Style x:Key="RowLabelStyle" TargetType="Label">
-                        <Setter Property="FontSize" Value="20"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="Height" Value="50"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        <Setter Property="Foreground" Value="Black"/>
-                    </Style>
-                </Grid.Resources>
-
-                <Border Grid.Column="0" Style="{StaticResource HeaderBorderStyle}">
-                    <Label Style="{StaticResource HeaderLabelStyle}" Content="IsValid"/>
-                </Border>
-                <Border Grid.Column="1" Style="{StaticResource HeaderBorderStyle}">
-                    <Label Style="{StaticResource HeaderLabelStyle}" Content="PageIndex"/>
-                </Border>
-                <Border Grid.Column="2" Style="{StaticResource HeaderBorderStyle}">
-                    <Label Style="{StaticResource HeaderLabelStyle}" Content="IsDirty"/>
-                </Border>
-                <Border Grid.Column="3" Style="{StaticResource HeaderBorderStyle}">
-                    <Label Style="{StaticResource HeaderLabelStyle}" Content="Requested"/>
-                </Border>
-                <Border Grid.Column="4" Style="{StaticResource HeaderBorderStyle}">
-                    <Label Style="{StaticResource HeaderLabelStyle}" Content="LastAccess"/>
-                </Border>
-
-                <!--Row template-->
-                <!--Row 0-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="1" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="1" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="0"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="1" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="1" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="4"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="1" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:08:26.4981"/>
-                </Border>
-
-                <!--Row 1-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="2" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="2" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="1"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="2" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="2" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="-1"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="2" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:07:33.2406"/>
-                </Border>
-
-                <!--Row 2-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="3" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="3" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="2"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="3" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="3" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="-1"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="3" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:07:33.2406"/>
-                </Border>
-
-                <!--Row 3-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="4" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="4" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="3"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="4" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="4" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="-1"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="4" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:07:33.2406"/>
-                </Border>
-
-                <!--Row 4-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="5" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="5" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="4"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="5" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="5" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="4"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="5" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:08:22.3489"/>
-                </Border>
-
-                <!--Row 5-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="6" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="6" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="5"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="6" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="6" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="-1"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="6" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:07:33.2406"/>
-                </Border>
-
-                <!--Row 6-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="7" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="7" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="6"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="7" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="7" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="4"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="7" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:08:20.2065"/>
-                </Border>
-
-                <!--Row 7-->
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="8" Grid.Column="0">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="True"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="8" Grid.Column="1">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="7"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="8" Grid.Column="2">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="False"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="8" Grid.Column="3">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="4"/>
-                </Border>
-                <Border Style="{StaticResource RowBorderStyle}" Grid.Row="8" Grid.Column="4">
-                    <Label Style="{StaticResource RowLabelStyle}" Content="14:08:24.3058"/>
-                </Border>
-            </Grid>
+            <DataGrid x:Name="dgProcessPageTable"/>
 
             <Border Grid.Column="1" BorderBrush="Black" BorderThickness="2">
                 <Grid >
@@ -537,7 +374,7 @@
                             </Style>
                         </Grid.Resources>
 
-                        <Button Grid.Column="0" Style="{StaticResource ButtonStyle}" Content="Start simulation" IsEnabled="False">
+                        <Button x:Name="SimulationStartButton" Grid.Column="0" Style="{StaticResource ButtonStyle}" Content="Start simulation" Click="OnStartSimulationClicked">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -545,7 +382,7 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button Grid.Column="1" Style="{StaticResource ButtonStyle}" Content="Commands Tab" Click="OnCommandsTabClicked">
+                        <Button x:Name="CommandsTabButton" Grid.Column="1" Style="{StaticResource ButtonStyle}" Content="Commands Tab" Click="OnCommandsTabClicked" IsEnabled="False">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="15"/>
