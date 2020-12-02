@@ -48,6 +48,13 @@ namespace Machine
         /// The list of commands to be executed during the simulation.
         /// </summary>
         internal static IReadOnlyList<Command> Commands;
+
+        public static Counter Counter;
+
+        //public static void InitCounter()
+        //{
+        //    Counter = new Counter();
+        //}
         /// <summary>
         /// The initializing method of the OS. Can be called from outside the project to start the simulation.
         /// </summary>
@@ -56,7 +63,7 @@ namespace Machine
         /// <param name="ramFrames">The number of frames the RAM will be divided into. Initially all are free.</param>
         /// <param name="maxPagesPerProcess">The maximum number of pages the page table of a process can hold.</param>
         /// <param name="delayTime">The value in milliseconds used for simulating the OS handling data-heavy operations.</param>
-        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 32, int maxPagesPerProcess = 8, int delayTime = 1000)
+        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000)
         {
             IsActive = true;
             ProcessCount = processCount;
@@ -71,6 +78,11 @@ namespace Machine
             Commands = generator.GenerateCommands();
             await MMU.Run(Commands);
             IsActive = false;
+        }
+
+        public static void InitCountingValues()
+        {
+            Counter = new Counter();
         }
 
         /// <summary>

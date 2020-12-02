@@ -410,7 +410,7 @@
                         </Border>
 
                         <Border Style="{StaticResource AccessBorderInfoValueStyle}" Grid.Row="1" Grid.Column="0">
-                            <Label Style="{StaticResource AccessLabelInfoValueStyle}" Content="12"/>
+                            <Label x:Name="RamAccessesLabel" Style="{StaticResource AccessLabelInfoValueStyle}" Content="0"/>
                         </Border>
 
                         <Border Style="{StaticResource AccessBorderInfoHeaderStyle}" Grid.Row="0" Grid.Column="1">
@@ -418,7 +418,7 @@
                         </Border>
 
                         <Border Style="{StaticResource AccessBorderInfoValueStyle}" Grid.Row="1" Grid.Column="1">
-                            <Label Style="{StaticResource AccessLabelInfoValueStyle}" Content="16"/>
+                            <Label x:Name="DiskAccessesLabel" Style="{StaticResource AccessLabelInfoValueStyle}" Content="0"/>
                         </Border>
 
                         <Border Style="{StaticResource AccessBorderInfoHeaderStyle}" Grid.Row="0" Grid.Column="2">
@@ -426,7 +426,7 @@
                         </Border>
 
                         <Border Style="{StaticResource AccessBorderInfoValueStyle}" Grid.Row="1" Grid.Column="2">
-                            <Label Style="{StaticResource AccessLabelInfoValueStyle}" Content="8"/>
+                            <Label x:Name="PageFaultsLabel" Style="{StaticResource AccessLabelInfoValueStyle}" Content="0"/>
                         </Border>
                     </Grid>
                 </Grid>

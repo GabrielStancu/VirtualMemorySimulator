@@ -4,6 +4,7 @@ using Machine.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,19 +22,21 @@ namespace VirtualMemorySimulator
         private static Task _simulation;
         private static int _processCount = 8;
         private ObservableCollection<Machine.Page> ProcessPageTable;
+        
         public MainWindow()
         {
             InitializeComponent();     
             this.RamGauge.DataContext = new GaugeViewModel();
-            SetColumnNames();
+            SetColumnNames();    
         }
 
         private async void Simulate()
         {
             SimulationStartButton.IsEnabled = false;
             CommandsTabButton.IsEnabled = true;
-
-            _simulation = OS.Run();
+            OS.InitCountingValues();
+            OS.Counter.PropertyChanged += OsCounterPropertyChanged;
+            _simulation = OS.Run();       
             await _simulation;
 
             SimulationStartButton.IsEnabled = true;
@@ -117,6 +120,13 @@ namespace VirtualMemorySimulator
             dgProcessPageTable.Columns[2].Header = "Is Dirty";
             dgProcessPageTable.Columns[3].Header = "Requested";
             dgProcessPageTable.Columns[4].Header = "Last Access";
+        }
+
+        private void OsCounterPropertyChanged(object sender, EventArgs e)
+        {
+            RamAccessesLabel.Content = OS.Counter.RamAccesses;
+            DiskAccessesLabel.Content = OS.Counter.DiskAccesses;
+            PageFaultsLabel.Content = OS.Counter.PageFaults;
         }
     }
 }
