@@ -7,41 +7,48 @@ namespace Machine
     /// <summary>
     /// Class used to count and return the number of accesses of the memory.
     /// </summary>
-    public class Counter
+    public static class Counter
     {
-        internal Counter()
+        internal static void ResetCounter()
         {
             RamAccesses = 0;
             DiskAccesses = 0;
             PageFaults = 0;
+            PageSwaps = 0;
         }
 
-        public int RamAccesses { get; private set; }
-        public int DiskAccesses { get; private set; }
-        public int PageFaults { get; private set; }
+        public static int RamAccesses { get; private set; }
+        public static int DiskAccesses { get; private set; }
+        public static int PageFaults { get; private set; }
+        public static int PageSwaps { get; private set; }
 
-        internal void IncrementRamAccesses()
+        internal static void IncrementRamAccesses()
         {
             RamAccesses++;
             OnPropertyChanged();
         }
 
-
-        internal void IncrementDiskAccesses()
+        internal static void IncrementDiskAccesses()
         {
             DiskAccesses++;
             OnPropertyChanged();
         }
 
-        internal void IncrementPageFaults()
+        internal static void IncrementPageFaults()
         {
             PageFaults++;
             OnPropertyChanged();
         }
 
-        public event EventHandler PropertyChanged;
+        internal static void IncrementPageSwaps()
+        {
+            PageSwaps++;
+            OnPropertyChanged();
+        }
 
-        private void OnPropertyChanged()
+        public static event EventHandler PropertyChanged;
+
+        private static void OnPropertyChanged()
         {
             PropertyChanged?.Invoke(null, new EventArgs());
         }

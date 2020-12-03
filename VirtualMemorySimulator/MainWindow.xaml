@@ -358,7 +358,7 @@
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#c97c5d">
                         <Label Content="Free Ram Frames:" FontSize="30" VerticalContentAlignment="Center" Foreground="LightGray"/>
-                        <Label Content="12 out of 32" FontSize="30" VerticalContentAlignment="Center" Foreground="White"/>
+                        <Label x:Name="FreeRamFramesLabel" Content="12 out of 32" FontSize="30" VerticalContentAlignment="Center" Foreground="White"/>
                     </StackPanel>
 
                     <Border Grid.Row="2" Background="#ffe6a7">
@@ -372,6 +372,7 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -427,6 +428,14 @@
 
                         <Border Style="{StaticResource AccessBorderInfoValueStyle}" Grid.Row="1" Grid.Column="2">
                             <Label x:Name="PageFaultsLabel" Style="{StaticResource AccessLabelInfoValueStyle}" Content="0"/>
+                        </Border>
+
+                        <Border Style="{StaticResource AccessBorderInfoHeaderStyle}" Grid.Row="0" Grid.Column="3">
+                            <Label Style="{StaticResource AccessLabelInfoHeaderStyle}" Content="Page Swaps:" />
+                        </Border>
+
+                        <Border Style="{StaticResource AccessBorderInfoValueStyle}" Grid.Row="1" Grid.Column="3">
+                            <Label x:Name="PageSwapsLabel" Style="{StaticResource AccessLabelInfoValueStyle}" Content="0"/>
                         </Border>
                     </Grid>
                 </Grid>

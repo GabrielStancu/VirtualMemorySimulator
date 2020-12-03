@@ -34,7 +34,7 @@ namespace Machine
         private async static Task AccessPage(Command command)
         {
             Page page = OS.Processes[command.ProcessId].PageTable.GetPageByIndex(command.PageIndex);
-            OS.Counter.IncrementRamAccesses(); //1 RAM access 
+            Counter.IncrementRamAccesses(); //1 RAM access 
 
             if (!page.IsValid)
             {
@@ -55,7 +55,7 @@ namespace Machine
         private async static Task HandlePageRequested(Command command, Page page)
         {
             page.Requested = command.ProcessId;
-            OS.Counter.IncrementPageFaults();
+            Counter.IncrementPageFaults();
             await OS.LoadPage(page);
         }
 
@@ -81,7 +81,7 @@ namespace Machine
             }
 
             page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            OS.Counter.IncrementRamAccesses(); //1 RAM access
+            Counter.IncrementRamAccesses(); //1 RAM access
         } 
     }
 }

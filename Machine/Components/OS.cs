@@ -33,7 +33,7 @@ namespace Machine
         /// <summary>
         /// The number of frames we can divide the RAM. Holds the number of remaining unloaded frames.
         /// </summary>
-        internal static int RamFrames { get; private set; }
+        public static int RamFrames { get; private set; }
         /// <summary>
         /// The "sleep" time we use to simulate the moving of data between memories and similar tasks.
         /// The value represents the number of milliseconds the task will be delayed / set on sleep.
@@ -49,7 +49,7 @@ namespace Machine
         /// </summary>
         internal static IReadOnlyList<Command> Commands;
 
-        public static Counter Counter;
+        public static event EventHandler RamFramesChanged;
 
         //public static void InitCounter()
         //{
@@ -72,17 +72,13 @@ namespace Machine
             MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
 
+            Counter.ResetCounter();
             Generator generator = new Generator();
             Processes = generator.GenerateProcesses();
 
             Commands = generator.GenerateCommands();
             await MMU.Run(Commands);
             IsActive = false;
-        }
-
-        public static void InitCountingValues()
-        {
-            Counter = new Counter();
         }
 
         /// <summary>
@@ -110,6 +106,7 @@ namespace Machine
                 if(RamFrames > 0)
                 {
                     RamFrames--;
+                    RamFramesChanged?.Invoke(null, new EventArgs());
                 }
                 else
                 {
@@ -121,6 +118,8 @@ namespace Machine
                 page.Requested = -1;
                 page.IsValid = true;
                 page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+                Counter.IncrementDiskAccesses();
             }
         }
 
@@ -175,7 +174,8 @@ namespace Machine
                 pageToSwap.IsDirty = false;
             }
 
-            pageToSwap.IsValid = false;  
+            pageToSwap.IsValid = false;
+            Counter.IncrementPageSwaps();
         }
     }
 }

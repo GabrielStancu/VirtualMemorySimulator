@@ -22,21 +22,25 @@ namespace VirtualMemorySimulator
         private static Task _simulation;
         private static int _processCount = 8;
         private ObservableCollection<Machine.Page> ProcessPageTable;
+        private int _freeRamFrames;
+        private int _totalRamFrames = 8;
         
         public MainWindow()
         {
             InitializeComponent();     
             this.RamGauge.DataContext = new GaugeViewModel();
-            SetColumnNames();    
+            SetColumnNames();
+            OS.RamFramesChanged += OnRamFramesChanged;
+            FreeRamFramesLabel.Content = $"{_totalRamFrames} out of {_totalRamFrames}";
         }
 
         private async void Simulate()
         {
             SimulationStartButton.IsEnabled = false;
             CommandsTabButton.IsEnabled = true;
-            OS.InitCountingValues();
-            OS.Counter.PropertyChanged += OsCounterPropertyChanged;
-            _simulation = OS.Run();       
+
+            Counter.PropertyChanged += OsCounterPropertyChanged;
+            _simulation = OS.Run(ramFrames:_totalRamFrames);       
             await _simulation;
 
             SimulationStartButton.IsEnabled = true;
@@ -124,9 +128,18 @@ namespace VirtualMemorySimulator
 
         private void OsCounterPropertyChanged(object sender, EventArgs e)
         {
-            RamAccessesLabel.Content = OS.Counter.RamAccesses;
-            DiskAccessesLabel.Content = OS.Counter.DiskAccesses;
-            PageFaultsLabel.Content = OS.Counter.PageFaults;
+            RamAccessesLabel.Content = Counter.RamAccesses;
+            DiskAccessesLabel.Content = Counter.DiskAccesses;
+            PageFaultsLabel.Content = Counter.PageFaults;
+            PageSwapsLabel.Content = Counter.PageSwaps;
+        }
+
+        private void OnRamFramesChanged(object sender, EventArgs e)
+        {
+            _freeRamFrames = OS.RamFrames;
+            FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_totalRamFrames}";
+
+            //here we will perform the gauge update once it works
         }
     }
 }
