@@ -31,9 +31,13 @@ namespace Machine
         /// </summary>
         internal static int MaxPagesPerProcess { get; private set; }
         /// <summary>
-        /// The number of frames we can divide the RAM. Holds the number of remaining unloaded frames.
+        /// Holds the number of remaining unloaded frames.
         /// </summary>
-        public static int RamFrames { get; private set; }
+        public static int FreeRamFrames { get; private set; }
+        /// <summary>
+        /// The number of frames we can divide the RAM.
+        /// </summary>
+        public static int TotalRamCapacity { get; private set; }
         /// <summary>
         /// The "sleep" time we use to simulate the moving of data between memories and similar tasks.
         /// The value represents the number of milliseconds the task will be delayed / set on sleep.
@@ -67,12 +71,13 @@ namespace Machine
         /// <param name="ramFrames">The number of frames the RAM will be divided into. Initially all are free.</param>
         /// <param name="maxPagesPerProcess">The maximum number of pages the page table of a process can hold.</param>
         /// <param name="delayTime">The value in milliseconds used for simulating the OS handling data-heavy operations.</param>
-        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000)
+        public static async Task Run(int processCount = 8, int commandsCount = 16, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1)
         {
             IsActive = true;
             ProcessCount = processCount;
             CommandsCount = commandsCount;
-            RamFrames = ramFrames;
+            FreeRamFrames = ramFrames;
+            TotalRamCapacity = ramFrames;
             MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
             RamFramesTable = new List<RamFrame>();
@@ -80,7 +85,7 @@ namespace Machine
             Counter.ResetCounter();
             Generator generator = new Generator();
             Processes = generator.GenerateProcesses();
-
+            RamFramesTable = generator.GenerateRamFrames(TotalRamCapacity);
             Commands = generator.GenerateCommands();
             await MMU.Run(Commands);
             IsActive = false;
@@ -108,10 +113,12 @@ namespace Machine
         {
             if(page.Requested != -1)
             {
-                if(RamFrames > 0)
-                {
-                    RamFrames--;
-                    LoadRamFrame(page, RamFramesTable.Count, false);
+                page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+                if (FreeRamFrames > 0)
+                {                   
+                    LoadRamFrame(page, TotalRamCapacity - FreeRamFrames);
+                    FreeRamFrames--;
                     RamFramesChanged?.Invoke(null, new EventArgs());
                 }
                 else
@@ -123,7 +130,7 @@ namespace Machine
 
                 page.Requested = -1;
                 page.IsValid = true;
-                page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                
 
                 Counter.IncrementDiskAccesses();
             }
@@ -164,7 +171,7 @@ namespace Machine
         {
             string lastAccess = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             Page pageToSwap = new Page(-1);
-            int frameIndex = -1, swappedFrameIndex = 0;
+            int swapIndex, pid = -1;
 
             foreach(var process in Processes)
             {
@@ -172,12 +179,11 @@ namespace Machine
                 {
                     if (page.IsValid)
                     {
-                        frameIndex++;
                         if(page.LastTimeAccessed.CompareTo(lastAccess) < 0)
                         {
                             pageToSwap = page;
                             lastAccess = page.LastTimeAccessed;
-                            swappedFrameIndex = frameIndex;
+                            pid = process.Pid;
                         }
                     }
                 }
@@ -190,33 +196,28 @@ namespace Machine
             }
 
             pageToSwap.IsValid = false;
-            LoadRamFrame(swapPage, swappedFrameIndex, true);
+            swapIndex = FindIndexInRam(pid, pageToSwap.PageIndex);
+            LoadRamFrame(swapPage, swapIndex);
             Counter.IncrementPageSwaps();
         }
 
-        private static void LoadRamFrame(Page frameInfo, int frameIndex, bool swap)
+        private static void LoadRamFrame(Page frameInfo, int frameIndex)
         {
-            if(!swap)
-            {
-                RamFramesTable.Add(new RamFrame()
-                {
-                    FrameIndex = frameIndex,
-                    ProcessId = frameInfo.Requested,
-                    PtIndex = frameInfo.PageIndex,
-                    LastAccess = frameInfo.LastTimeAccessed
-                });
-            }
-            else
-            {
-                RamFramesTable[frameIndex].ProcessId = frameInfo.Requested; 
-                RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
-                RamFramesTable[frameIndex].LastAccess = frameInfo.LastTimeAccessed;
-            }
+            string crtTime = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            frameInfo.LastTimeAccessed = crtTime;
+            RamFramesTable[frameIndex].LastAccess = crtTime;
+            RamFramesTable[frameIndex].ProcessId = frameInfo.Requested;
+            RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
         }
 
         internal static void OnCommandFinished(Command cmd)
         {
             CommandFinished?.Invoke(cmd, new EventArgs());
+        }
+
+        private static int FindIndexInRam(int pid, int pageIndex)
+        {
+            return RamFramesTable.IndexOf(RamFramesTable.Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
         }
     }
 }

@@ -165,7 +165,7 @@ namespace VirtualMemorySimulator
 
         private void OnRamFramesChanged(object sender, EventArgs e)
         {
-            _freeRamFrames = OS.RamFrames;
+            _freeRamFrames = OS.FreeRamFrames;
             FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_totalRamFrames}";
 
             //here we will perform the gauge update once it works

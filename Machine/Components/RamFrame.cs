@@ -43,7 +43,7 @@ namespace Machine.Components
                 if (_ptIndex != value)
                 {
                     _ptIndex = value;
-                    OnPropertyChanged("PageTableIndex");
+                    OnPropertyChanged("PtIndex");
                 }
             }
         }

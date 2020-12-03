@@ -1,6 +1,7 @@
 ﻿using Machine.Components;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Machine.Utilities
 {
@@ -51,6 +52,26 @@ namespace Machine.Utilities
             }
 
             return processes;
+        }
+
+        internal List<RamFrame> GenerateRamFrames(int size)
+        {
+            List<RamFrame> ramFrames = new List<RamFrame>(size);
+            const int UNDEFINED = -1;
+            string initTime = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            for (int frameIndex = 0; frameIndex < size; frameIndex++)
+            {
+                ramFrames.Add(new RamFrame()
+                {
+                    FrameIndex = frameIndex,
+                    ProcessId = UNDEFINED,
+                    PtIndex = UNDEFINED,
+                    LastAccess = initTime
+                });
+            }
+
+            return ramFrames;
         }
 
         /// <summary>
