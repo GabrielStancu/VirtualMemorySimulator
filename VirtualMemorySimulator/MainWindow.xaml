@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VirtualMemorySimulator"
         mc:Ignorable="d"
-        Height="850" Width="1245" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
     <StackPanel>
         <Grid x:Name="HeaderGrid" Background="#c1c1c1">

@@ -24,7 +24,11 @@ namespace VirtualMemorySimulator
         private ObservableCollection<Machine.Page> ProcessPageTable;
         private int _freeRamFrames;
         private int _totalRamFrames = 8;
-        
+        private bool _extendedView = false;
+
+        private CommandsInfo _cmdInfo;
+        private RamInfo _ramInfo;
+
         public MainWindow()
         {
             InitializeComponent();     
@@ -55,8 +59,18 @@ namespace VirtualMemorySimulator
 
         private void OnCommandsTabClicked(object sender, RoutedEventArgs e)
         {
-            CommandsInfo cmdInfo = new CommandsInfo();
-            cmdInfo.Show();
+            if (_extendedView)
+            {
+                _cmdInfo.Visibility = Visibility.Hidden;
+                _ramInfo.Visibility = Visibility.Hidden;
+                _extendedView = false;
+            }
+            else
+            {
+                _cmdInfo.Visibility = Visibility.Visible;
+                _ramInfo.Visibility = Visibility.Visible;
+                _extendedView = true;
+            }
         }
 
         private void GetProcessPageTableInfo(string processName)
@@ -91,9 +105,24 @@ namespace VirtualMemorySimulator
 
         private void OnStartSimulationClicked(object sender, RoutedEventArgs e)
         {
+            int offset = 12;
+            int cmdInfoWidth = 370;
+
             Simulate();
             GetProcessPageTableInfo("p0");
             GetProcessesDetails();
+
+            _cmdInfo = new CommandsInfo();
+            _cmdInfo.Show();
+            _cmdInfo.Left = this.Left - cmdInfoWidth - offset;
+            _cmdInfo.Top = this.Top;
+
+            _ramInfo = new RamInfo();
+            _ramInfo.Show();
+            _ramInfo.Left = this.Left + this.Width - offset;
+            _ramInfo.Top = this.Top;
+
+            _extendedView = true;
         }
 
         private void GetProcessesDetails()

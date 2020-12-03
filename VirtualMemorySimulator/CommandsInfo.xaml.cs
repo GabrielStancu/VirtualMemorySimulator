@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,13 +25,14 @@ namespace VirtualMemorySimulator
         public CommandsInfo()
         {
             InitializeComponent();
-            FillCommands();
+            dgCmds.ItemsSource = OS.GetCommands();
+            OS.CommandFinished += OnCommandFinished;
         }
 
-        private void FillCommands()
+        private void OnCommandFinished(object sender, EventArgs e)
         {
-            IReadOnlyList<Command> commands = OS.GetCommands();
-            dgCmds.ItemsSource = commands;
+            Command lastCommand = (Command)sender;
+            dgCmds.ScrollIntoView(lastCommand);
         }
     }
 }

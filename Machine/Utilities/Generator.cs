@@ -73,7 +73,7 @@ namespace Machine.Utilities
             //generate random page number (0..Process.PageTableSize)
             int pageIndex = Generate(0, OS.Processes[pid].PageTableSize);
 
-            return new Command(pageIndex, pid, op);
+            return new Command(pid, pageIndex, op);
         }
 
         /// <summary>

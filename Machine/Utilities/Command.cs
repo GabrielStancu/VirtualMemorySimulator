@@ -14,23 +14,23 @@ namespace Machine.Utilities
         /// <param name="pageIndex">The index of the page to be accessed in the page table.</param>
         /// <param name="processId">The process requesting the page access.</param>
         /// <param name="accessType">The operation type: read / write.</param>
-        internal Command(int pageIndex, int processId, PageAccessType accessType)
+        internal Command(int processId, int pageIndex, PageAccessType accessType) 
         {
-            PageIndex = pageIndex;
             ProcessId = processId;
+            PageIndex = pageIndex;            
             AccessType = accessType;
             completed = false;
         }
 
         /// <summary>
-        /// The index of the page to be accessed in the page table.
-        /// </summary>
-        public int PageIndex { get; }
-
-        /// <summary>
         /// The process requesting the page access.
         /// </summary>
         public int ProcessId { get; }
+
+        /// <summary>
+        /// The index of the page to be accessed in the page table.
+        /// </summary>
+        public int PageIndex { get; }  
 
         /// <summary>
         /// The operation type: read / write.

@@ -49,7 +49,11 @@ namespace Machine
         /// </summary>
         internal static IReadOnlyList<Command> Commands;
 
+        public static List<RamFrame> RamFramesTable;
+
         public static event EventHandler RamFramesChanged;
+
+        public static event EventHandler CommandFinished;
 
         //public static void InitCounter()
         //{
@@ -71,6 +75,7 @@ namespace Machine
             RamFrames = ramFrames;
             MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
+            RamFramesTable = new List<RamFrame>();
 
             Counter.ResetCounter();
             Generator generator = new Generator();
@@ -106,11 +111,12 @@ namespace Machine
                 if(RamFrames > 0)
                 {
                     RamFrames--;
+                    LoadRamFrame(page, RamFramesTable.Count, false);
                     RamFramesChanged?.Invoke(null, new EventArgs());
                 }
                 else
                 {
-                    await SwapPage();
+                    await SwapPage(page); //send ram frame through event here
                 }
 
                 await OS.SimulateHandling();
@@ -148,22 +154,31 @@ namespace Machine
         public static IReadOnlyList<Command> GetCommands()
             => Commands;
 
+        public static IReadOnlyList<RamFrame> GetRamFrames()
+            => RamFramesTable.AsReadOnly();
+
         /// <summary>
         /// Simulates asynchronously the process of swapping a page when the RAM is fully loaded and another page needs to be loaded.
         /// </summary>
-        private async static Task SwapPage()
+        private async static Task SwapPage(Page swapPage)
         {
             string lastAccess = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             Page pageToSwap = new Page(-1);
+            int frameIndex = -1, swappedFrameIndex = 0;
 
             foreach(var process in Processes)
             {
                 foreach (var page in process.PageTable.Pages)
                 {
-                    if (page.LastTimeAccessed.CompareTo(lastAccess) < 0 && page.IsValid)
+                    if (page.IsValid)
                     {
-                        pageToSwap = page;
-                        lastAccess = page.LastTimeAccessed;
+                        frameIndex++;
+                        if(page.LastTimeAccessed.CompareTo(lastAccess) < 0)
+                        {
+                            pageToSwap = page;
+                            lastAccess = page.LastTimeAccessed;
+                            swappedFrameIndex = frameIndex;
+                        }
                     }
                 }
             }
@@ -175,7 +190,33 @@ namespace Machine
             }
 
             pageToSwap.IsValid = false;
+            LoadRamFrame(swapPage, swappedFrameIndex, true);
             Counter.IncrementPageSwaps();
+        }
+
+        private static void LoadRamFrame(Page frameInfo, int frameIndex, bool swap)
+        {
+            if(!swap)
+            {
+                RamFramesTable.Add(new RamFrame()
+                {
+                    FrameIndex = frameIndex,
+                    ProcessId = frameInfo.Requested,
+                    PtIndex = frameInfo.PageIndex,
+                    LastAccess = frameInfo.LastTimeAccessed
+                });
+            }
+            else
+            {
+                RamFramesTable[frameIndex].ProcessId = frameInfo.Requested; 
+                RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
+                RamFramesTable[frameIndex].LastAccess = frameInfo.LastTimeAccessed;
+            }
+        }
+
+        internal static void OnCommandFinished(Command cmd)
+        {
+            CommandFinished?.Invoke(cmd, new EventArgs());
         }
     }
 }

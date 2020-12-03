@@ -10,7 +10,7 @@ namespace Machine
     /// Class used to simulate the memory management unit (MMU).
     /// Performs accesses on the page table and counts the accesses of memory (RAM and Disk).
     /// </summary>
-    internal class MMU
+    internal static class MMU
     {
         /// <summary>
         /// Asynchronous method that runs each command on a separate Task / thread.
@@ -22,6 +22,7 @@ namespace Machine
             {
                 await AccessPage(commands[index]);
                 commands[index].Completed = true;
+                OS.OnCommandFinished(commands[index]);
             }
         }
 
