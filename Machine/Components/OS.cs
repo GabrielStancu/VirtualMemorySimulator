@@ -59,10 +59,6 @@ namespace Machine
 
         public static event EventHandler CommandFinished;
 
-        //public static void InitCounter()
-        //{
-        //    Counter = new Counter();
-        //}
         /// <summary>
         /// The initializing method of the OS. Can be called from outside the project to start the simulation.
         /// </summary>
@@ -71,7 +67,7 @@ namespace Machine
         /// <param name="ramFrames">The number of frames the RAM will be divided into. Initially all are free.</param>
         /// <param name="maxPagesPerProcess">The maximum number of pages the page table of a process can hold.</param>
         /// <param name="delayTime">The value in milliseconds used for simulating the OS handling data-heavy operations.</param>
-        public static async Task Run(int processCount = 8, int commandsCount = 16, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1)
+        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000)
         {
             IsActive = true;
             ProcessCount = processCount;
@@ -111,26 +107,26 @@ namespace Machine
         /// <param name="page">The page that's requested to be loaded to the RAM.</param>
         internal static async Task LoadPage(Page page)
         {
-            if(page.Requested != -1)
+            if (page.Requested != -1)
             {
                 page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
 
                 if (FreeRamFrames > 0)
-                {                   
+                {
                     LoadRamFrame(page, TotalRamCapacity - FreeRamFrames);
                     FreeRamFrames--;
                     RamFramesChanged?.Invoke(null, new EventArgs());
                 }
                 else
                 {
-                    await SwapPage(page); //send ram frame through event here
+                    await SwapPage(page); 
                 }
 
                 await OS.SimulateHandling();
 
                 page.Requested = -1;
                 page.IsValid = true;
-                
+
 
                 Counter.IncrementDiskAccesses();
             }
@@ -169,11 +165,44 @@ namespace Machine
         /// </summary>
         private async static Task SwapPage(Page swapPage)
         {
+            (Page pageToSwap, int pid) = GetPageToBeSwapped();
+
+            if (pageToSwap.IsDirty)
+            {
+                await SavePageChangesToDisk(pageToSwap);
+                pageToSwap.IsDirty = false;
+            }
+
+            pageToSwap.IsValid = false;
+            pageToSwap.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture); ;
+            LoadRamFrame(swapPage, FindIndexInRam(pid, pageToSwap.PageIndex));
+            Counter.IncrementPageSwaps();
+        }
+
+        private static void LoadRamFrame(Page frameInfo, int frameIndex)
+        {
+            RamFramesTable[frameIndex].LastAccess = frameInfo.LastTimeAccessed;
+            RamFramesTable[frameIndex].ProcessId = frameInfo.Requested;
+            RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
+        }
+
+        internal static void OnCommandFinished(Command cmd)
+        {
+            CommandFinished?.Invoke(cmd, new EventArgs());
+        }
+
+        private static int FindIndexInRam(int pid, int pageIndex)
+        {
+            return RamFramesTable.IndexOf(RamFramesTable.Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
+        }
+
+        private static (Page PageToSwap, int Pid) GetPageToBeSwapped()
+        {
             string lastAccess = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
             Page pageToSwap = new Page(-1);
-            int swapIndex, pid = -1;
+            int pid = -1;
 
-            foreach(var process in Processes)
+            foreach (var process in Processes)
             {
                 foreach (var page in process.PageTable.Pages)
                 {
@@ -189,35 +218,8 @@ namespace Machine
                 }
             }
 
-            if(pageToSwap.IsDirty)
-            {
-                await SavePageChangesToDisk(pageToSwap);
-                pageToSwap.IsDirty = false;
-            }
-
-            pageToSwap.IsValid = false;
-            swapIndex = FindIndexInRam(pid, pageToSwap.PageIndex);
-            LoadRamFrame(swapPage, swapIndex);
-            Counter.IncrementPageSwaps();
+            return (pageToSwap, pid);
         }
 
-        private static void LoadRamFrame(Page frameInfo, int frameIndex)
-        {
-            string crtTime = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            frameInfo.LastTimeAccessed = crtTime;
-            RamFramesTable[frameIndex].LastAccess = crtTime;
-            RamFramesTable[frameIndex].ProcessId = frameInfo.Requested;
-            RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
-        }
-
-        internal static void OnCommandFinished(Command cmd)
-        {
-            CommandFinished?.Invoke(cmd, new EventArgs());
-        }
-
-        private static int FindIndexInRam(int pid, int pageIndex)
-        {
-            return RamFramesTable.IndexOf(RamFramesTable.Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
-        }
     }
 }

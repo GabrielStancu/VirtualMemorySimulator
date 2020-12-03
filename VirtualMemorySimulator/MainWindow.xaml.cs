@@ -48,7 +48,6 @@ namespace VirtualMemorySimulator
             await _simulation;
 
             SimulationStartButton.IsEnabled = true;
-            CommandsTabButton.IsEnabled = false;
         }
 
         private void ProcessBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -131,7 +130,7 @@ namespace VirtualMemorySimulator
             List<Label> commandsLabels = new List<Label> { p1CommandsLabel, p2CommandsLabel, p3CommandsLabel, p4CommandsLabel,
                                                            p5CommandsLabel, p6CommandsLabel, p7CommandsLabel, p8CommandsLabel};
 
-            for(int pid = 0; pid < _processCount; pid++)
+            for (int pid = 0; pid < _processCount; pid++)
             {
                 commandsLabels[pid].Content = commands.FindAll(c => c.ProcessId == pid).Count;
             }
@@ -140,7 +139,7 @@ namespace VirtualMemorySimulator
             List<Label> pageTableSizeLabels = new List<Label> { p1PageTableSizeLabel, p2PageTableSizeLabel, p3PageTableSizeLabel, p4PageTableSizeLabel,
                                                                 p5PageTableSizeLabel, p6PageTableSizeLabel, p7PageTableSizeLabel, p8PageTableSizeLabel};
 
-            for(int pid = 0; pid < _processCount; pid++)
+            for (int pid = 0; pid < _processCount; pid++)
             {
                 pageTableSizeLabels[pid].Content = processes[pid].PageTableSize;
             }  
