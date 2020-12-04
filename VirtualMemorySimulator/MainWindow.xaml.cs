@@ -52,7 +52,6 @@ namespace VirtualMemorySimulator
             CommandsTabButton.IsEnabled = true;
             ConfigButton.IsEnabled = false;
 
-            ConfigureProcesses();
             Counter.PropertyChanged += OsCounterPropertyChanged;
             _simulation = OS.Run(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);       
             await _simulation;
@@ -206,7 +205,7 @@ namespace VirtualMemorySimulator
 
         private void OnConfigButtonClicked(object sender, RoutedEventArgs e)
         {
-            _configWindow = new ConfigWindow(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);
+            _configWindow = new ConfigWindow(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay, MaxProcessCount);
             _configWindow.Closing += _configWindow_Closing;
             _configWindow.Show();
         }
@@ -219,6 +218,8 @@ namespace VirtualMemorySimulator
             _pagesPerProc = _configWindow.PagesPerProc;
             _osDelay = _configWindow.OsDelay;
             _betweenOpsDelay = _configWindow.BetweenOpsDelay;
+
+            ConfigureProcesses();
         }
 
         private void ConfigureProcesses()
@@ -228,11 +229,13 @@ namespace VirtualMemorySimulator
             for(int pid = 0; pid<_processCount; pid++)
             {
                 processBorders[pid].IsEnabled = true;
+                processBorders[pid].Background = Brushes.CadetBlue;
             }
 
             for(int pid = _processCount; pid < MaxProcessCount; pid++)
             {
                 processBorders[pid].IsEnabled = false;
+                processBorders[pid].Background = Brushes.Gray;
             }
         }
     }

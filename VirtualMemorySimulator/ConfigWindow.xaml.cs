@@ -24,6 +24,8 @@ namespace VirtualMemorySimulator
         private int _osDelay;
         private int _betweenOpsDelay;
 
+        private readonly int _maxProcesses;
+
         public int ProcessCount { get => _processCount; internal set => _processCount = value; }
         public int CommandsCount { get => _commandsCount; internal set => _commandsCount = value; }
         public int RamFrames { get => _ramFrames; internal set => _ramFrames = value; }
@@ -31,7 +33,7 @@ namespace VirtualMemorySimulator
         public int OsDelay { get => _osDelay; internal set => _osDelay = value; }
         public int BetweenOpsDelay { get => _betweenOpsDelay; internal set => _betweenOpsDelay = value; }
 
-        public ConfigWindow(int processCount, int commandsCount, int ramFrames, int pagesPerProc, int osDelay, int betweenOpsDelay)
+        public ConfigWindow(int processCount, int commandsCount, int ramFrames, int pagesPerProc, int osDelay, int betweenOpsDelay, int maxProcesses)
         {
             _processCount = processCount;
             _commandsCount = commandsCount;
@@ -39,13 +41,14 @@ namespace VirtualMemorySimulator
             _pagesPerProc = pagesPerProc;
             _osDelay = osDelay;
             _betweenOpsDelay = betweenOpsDelay;
+            _maxProcesses = maxProcesses;
 
             InitializeComponent();
         }
 
         private void OnProcessTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(processesCountTextBlock, _processCount, 8);
+            ParseTextBoxContent(processesCountTextBlock, _processCount, _maxProcesses);
         }
 
         private void OnCommandsTbLostFocus(object sender, RoutedEventArgs e)
@@ -75,12 +78,19 @@ namespace VirtualMemorySimulator
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            ParseTextBoxContent(processesCountTextBlock, _processCount, _maxProcesses);
+            ParseTextBoxContent(commandsCountTextBlock, _commandsCount);
+            ParseTextBoxContent(ramFramesCountTextBlock, _ramFrames);
+            ParseTextBoxContent(maxPagesPerProcessTextBlock, _pagesPerProc);
+            ParseTextBoxContent(delayTimeTextBlock, _osDelay);
+            ParseTextBoxContent(betweenOpsDelayTextBlock, _betweenOpsDelay);
+
             _processCount = Int32.Parse(processesCountTextBlock.Text);
             _commandsCount = Int32.Parse(commandsCountTextBlock.Text);
-            _ramFrames = Int32.Parse(ramFramesCountTextBlock.Text); 
+            _ramFrames = Int32.Parse(ramFramesCountTextBlock.Text);
             _pagesPerProc = Int32.Parse(maxPagesPerProcessTextBlock.Text);
-            _osDelay = Int32.Parse(delayTimeTextBlock.Text); 
-            _betweenOpsDelay = Int32.Parse(betweenOpsDelayTextBlock.Text); 
+            _osDelay = Int32.Parse(delayTimeTextBlock.Text);
+            _betweenOpsDelay = Int32.Parse(betweenOpsDelayTextBlock.Text);
         }
 
         private void ParseTextBoxContent(TextBox textBox, int value, int maxValue = -1)
