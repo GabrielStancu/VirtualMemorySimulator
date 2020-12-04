@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VirtualMemorySimulator"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="Window_StateChanged">
 
     <StackPanel>
         <Grid x:Name="HeaderGrid" Background="#c1c1c1">

@@ -238,5 +238,21 @@ namespace VirtualMemorySimulator
                 processBorders[pid].Background = Brushes.Gray;
             }
         }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            WindowState ws = WindowState;
+
+            if (_extendedView)
+            {
+                _cmdInfo.WindowState = ws;
+                _ramInfo.WindowState = ws;
+            }
+
+            if (_configWindow != null)
+            {
+                _configWindow.WindowState = ws;
+            }
+        }
     }
 }
