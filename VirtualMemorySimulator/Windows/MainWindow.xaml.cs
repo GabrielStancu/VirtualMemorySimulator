@@ -40,7 +40,7 @@ namespace VirtualMemorySimulator.Windows
         public MainWindow()
         {
             InitializeComponent();
-            GaugeViewModel = new GaugeViewModel(_ramFrames);
+            GaugeViewModel = new GaugeViewModel();
             RamGauge.DataContext = GaugeViewModel;
             SetColumnNames();
             OS.RamFramesChanged += OnRamFramesChanged;
@@ -174,13 +174,49 @@ namespace VirtualMemorySimulator.Windows
             PageSwapsLabel.Content = Counter.PageSwaps;
         }
 
-        private void OnRamFramesChanged(object sender, EventArgs e)
+        private async void OnRamFramesChanged(object sender, EventArgs e)
         {
             _freeRamFrames = OS.FreeRamFrames;
             FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_ramFrames}";
+            await CreateContinuosIncreaseOnGauge();
+        }
 
-            //here we will perform the gauge update once it works
-            GaugeViewModel.Value = _freeRamFrames;
+        private async Task CreateContinuosIncreaseOnGauge()
+        {
+            int initValue = GaugeViewModel.Value;
+            int maxValue = 100;
+            int relativeFramesNumber = (int)(1.0 / _ramFrames * maxValue);
+            int mappedValue = (int)(Convert.ToDouble(_ramFrames - _freeRamFrames) / _ramFrames * maxValue);
+            int forwardOffset = 2;
+            int backwardOffset = 3;
+            int delayTime = _betweenOpsDelay / (relativeFramesNumber + forwardOffset + backwardOffset + (backwardOffset - forwardOffset));
+            
+
+            for (int crtValue = initValue; crtValue <= mappedValue; crtValue++)
+            {
+                GaugeViewModel.Value = crtValue;
+                await Task.Delay(delayTime);
+            }
+
+            initValue = GaugeViewModel.Value;
+            if (initValue != maxValue)
+            {
+                for (int crtValue = initValue; crtValue <= initValue + forwardOffset; crtValue++)
+                {
+                    GaugeViewModel.Value = crtValue;
+                    await Task.Delay(delayTime);
+                }
+
+                initValue = GaugeViewModel.Value;   
+                for (int crtValue = initValue; crtValue >= initValue - backwardOffset; crtValue--)
+                {
+                    GaugeViewModel.Value = crtValue;
+                    await Task.Delay(delayTime);
+                }
+
+                GaugeViewModel.Value = GaugeViewModel.Value++;
+                await Task.Delay(delayTime);
+            }     
         }
 
         private void OnOsStateChanged(object sender, EventArgs e)

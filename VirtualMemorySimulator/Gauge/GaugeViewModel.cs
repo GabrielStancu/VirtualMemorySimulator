@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace VirtualMemorySimulator.Gauge
 {
@@ -12,11 +13,11 @@ namespace VirtualMemorySimulator.Gauge
         }
 
         int _maxValue;
-        public GaugeViewModel(int maxValue)
+        public GaugeViewModel()
         {
             Angle = -90;
             Value = 0;
-            _maxValue = maxValue;
+            _maxValue = 100;
         }
 
         int _angle;
@@ -42,9 +43,20 @@ namespace VirtualMemorySimulator.Gauge
             {
                 if (value >= 0 && value <= _maxValue && _value != value)
                 {
-                    int mappedValue = (int)(1.0 * (_maxValue - value) / _maxValue * 100);
-                    _value = mappedValue;
-                    Angle = (int)(1.0 * mappedValue / 100 * 180) - 90;
+                    //int mappedValue = (int)(1.0 * (_maxValue - value) / _maxValue * 100);
+                    //Task.Run(() =>
+                    //{
+                    //    for(int crtValue = _value; crtValue <=mappedValue; crtValue++)
+                    //    {
+                    //        _value = crtValue;
+                    //        Angle = (int)(1.0 * _value / 100 * 180) - 90;
+                    //        NotifyPropertyChanged("Value");
+                    //        Task.Delay(200);
+                    //    }
+                    //});
+                    
+                    _value = value;
+                    Angle = (int)(1.0 * _value / 100 * 180) - 90;
                     NotifyPropertyChanged("Value");
                 }
             }
