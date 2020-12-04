@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using VirtualMemorySimulator.Gauge;
 
-namespace VirtualMemorySimulator
+namespace VirtualMemorySimulator.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,6 +24,7 @@ namespace VirtualMemorySimulator
         private int _freeRamFrames;
         private bool _extendedView = false;
         private const int MaxProcessCount = 8;
+        internal GaugeViewModel GaugeViewModel { get; set; }
 
         private CommandsInfo _cmdInfo;
         private RamInfo _ramInfo;
@@ -38,8 +39,9 @@ namespace VirtualMemorySimulator
 
         public MainWindow()
         {
-            InitializeComponent();     
-            this.RamGauge.DataContext = new GaugeViewModel();
+            InitializeComponent();
+            GaugeViewModel = new GaugeViewModel(_ramFrames);
+            RamGauge.DataContext = GaugeViewModel;
             SetColumnNames();
             OS.RamFramesChanged += OnRamFramesChanged;
             OS.OsStateChanged += OnOsStateChanged;
@@ -178,6 +180,7 @@ namespace VirtualMemorySimulator
             FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_ramFrames}";
 
             //here we will perform the gauge update once it works
+            GaugeViewModel.Value = _freeRamFrames;
         }
 
         private void OnOsStateChanged(object sender, EventArgs e)
@@ -199,8 +202,6 @@ namespace VirtualMemorySimulator
                     OsStateBorder.Background = new SolidColorBrush(Color.FromRgb(6, 214, 160));
                     break;
             }
-
-            //here we will perform the gauge update once it works
         }
 
         private void OnConfigButtonClicked(object sender, RoutedEventArgs e)

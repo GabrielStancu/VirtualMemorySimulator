@@ -15,7 +15,7 @@ using Machine;
 using Machine.Components;
 using Machine.Utilities;
 
-namespace VirtualMemorySimulator
+namespace VirtualMemorySimulator.Windows
 {
     /// <summary>
     /// Interaction logic for CommandsInfo.xaml

@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 
-namespace VirtualMemorySimulator
+namespace VirtualMemorySimulator.Windows
 {
     /// <summary>
     /// Interaction logic for RamInfo.xaml
