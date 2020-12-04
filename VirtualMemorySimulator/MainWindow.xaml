@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VirtualMemorySimulator"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
@@ -356,7 +357,7 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button x:Name="ConfigButton" Grid.Column="2" Style="{StaticResource ButtonStyle}" Content="S" Click="OnConfigButtonClicked" Width="50">
+                        <Button x:Name="ConfigButton" Grid.Column="2" Style="{StaticResource ButtonStyle}" Content="{materialDesign:PackIcon Kind=Settings}" Click="OnConfigButtonClicked" Width="50">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="25"/>

@@ -20,15 +20,16 @@ namespace VirtualMemorySimulator
     public partial class MainWindow : Window
     {
         private static Task _simulation;
-        private int _processCount = 8; 
         private ObservableCollection<Machine.Page> ProcessPageTable;
         private int _freeRamFrames;
         private bool _extendedView = false;
+        private const int MaxProcessCount = 8;
 
         private CommandsInfo _cmdInfo;
         private RamInfo _ramInfo;
         private ConfigWindow _configWindow;
 
+        private int _processCount = 8;
         private int _totalCommands = 48;
         private int _ramFrames = 12;
         private int _pagesPerProc = 8;
@@ -51,6 +52,7 @@ namespace VirtualMemorySimulator
             CommandsTabButton.IsEnabled = true;
             ConfigButton.IsEnabled = false;
 
+            ConfigureProcesses();
             Counter.PropertyChanged += OsCounterPropertyChanged;
             _simulation = OS.Run(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);       
             await _simulation;
@@ -204,18 +206,34 @@ namespace VirtualMemorySimulator
 
         private void OnConfigButtonClicked(object sender, RoutedEventArgs e)
         {
-            _configWindow = new ConfigWindow(_totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);
+            _configWindow = new ConfigWindow(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);
             _configWindow.Closing += _configWindow_Closing;
             _configWindow.Show();
         }
 
         private void _configWindow_Closing(object sender, CancelEventArgs e)
         {
+            _processCount = _configWindow.ProcessCount;
             _totalCommands = _configWindow.CommandsCount;
             _ramFrames = _configWindow.RamFrames;
             _pagesPerProc = _configWindow.PagesPerProc;
             _osDelay = _configWindow.OsDelay;
             _betweenOpsDelay = _configWindow.BetweenOpsDelay;
+        }
+
+        private void ConfigureProcesses()
+        {
+            List<Border> processBorders = new List<Border>{ p0, p1, p2, p3, p4, p5, p6, p7 };
+
+            for(int pid = 0; pid<_processCount; pid++)
+            {
+                processBorders[pid].IsEnabled = true;
+            }
+
+            for(int pid = _processCount; pid < MaxProcessCount; pid++)
+            {
+                processBorders[pid].IsEnabled = false;
+            }
         }
     }
 }

@@ -21,6 +21,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.Resources>
@@ -56,46 +57,55 @@
         </Grid.Resources>
 
         <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="0" Grid.Column="0">
-            <Label Style="{StaticResource ParamNameLabelStyle}" Content="Commands:"/>
+            <Label Style="{StaticResource ParamNameLabelStyle}" Content="Processes Number:"/>
         </Border>
 
         <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="0" Grid.Column="1">
+            <TextBox x:Name="processesCountTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=ProcessCount, Mode=OneWay}" LostFocus="OnProcessTbLostFocus"/>
+        </Border>
+
+
+        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="1" Grid.Column="0">
+            <Label Style="{StaticResource ParamNameLabelStyle}" Content="Commands:"/>
+        </Border>
+
+        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="1" Grid.Column="1">
             <TextBox x:Name="commandsCountTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=CommandsCount, Mode=OneWay}" LostFocus="OnCommandsTbLostFocus"/>
         </Border>
 
         
-        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="1" Grid.Column="0">
+        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="2" Grid.Column="0">
             <Label Style="{StaticResource ParamNameLabelStyle}" Content="Ram Frames:"/>
         </Border>
 
-        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="1" Grid.Column="1">
+        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="2" Grid.Column="1">
             <TextBox x:Name="ramFramesCountTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=RamFrames, Mode=OneWay}" LostFocus="OnRamFramesTbLostFocus"/>
         </Border>
 
 
-        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="2" Grid.Column="0">
+        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="3" Grid.Column="0">
             <Label Style="{StaticResource ParamNameLabelStyle}" Content="Max Pages / Process:"/>
         </Border>
 
-        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="2" Grid.Column="1">
+        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="3" Grid.Column="1">
             <TextBox x:Name="maxPagesPerProcessTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=PagesPerProc, Mode=OneWay}" LostFocus="OnPagesPerProcTbLostFocus"/>
         </Border>
 
 
-        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="3" Grid.Column="0">
+        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="4" Grid.Column="0">
             <Label Style="{StaticResource ParamNameLabelStyle}" Content="OS Delay Time:"/>
         </Border>
 
-        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="3" Grid.Column="1">
+        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="4" Grid.Column="1">
             <TextBox x:Name="delayTimeTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=OsDelay, Mode=OneWay}" LostFocus="OnOsDelayTbLostFocus"/>
         </Border>
 
         
-        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="4" Grid.Column="0">
+        <Border Style="{StaticResource ParamNameBorderStyle}" Grid.Row="5" Grid.Column="0">
             <Label Style="{StaticResource ParamNameLabelStyle}" Content="Ops Exec Delay:"/>
         </Border>
 
-        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="4" Grid.Column="1">
+        <Border Style="{StaticResource ParamValueBorderStyle}" Grid.Row="5" Grid.Column="1">
             <TextBox x:Name="betweenOpsDelayTextBlock" Style="{StaticResource ParamValueTextBlockStyle}" Text="{Binding Path=BetweenOpsDelay, Mode=OneWay}" LostFocus="OnBetweenOpsTbLostFocus"/>
         </Border>
     </Grid>
