@@ -20,14 +20,20 @@ namespace VirtualMemorySimulator
     public partial class MainWindow : Window
     {
         private static Task _simulation;
-        private static int _processCount = 8;
+        private int _processCount = 8; 
         private ObservableCollection<Machine.Page> ProcessPageTable;
         private int _freeRamFrames;
-        private int _totalRamFrames = 8;
         private bool _extendedView = false;
 
         private CommandsInfo _cmdInfo;
         private RamInfo _ramInfo;
+        private ConfigWindow _configWindow;
+
+        private int _totalCommands = 48;
+        private int _ramFrames = 12;
+        private int _pagesPerProc = 8;
+        private int _osDelay = 1000;
+        private int _betweenOpsDelay = 750;
 
         public MainWindow()
         {
@@ -35,18 +41,21 @@ namespace VirtualMemorySimulator
             this.RamGauge.DataContext = new GaugeViewModel();
             SetColumnNames();
             OS.RamFramesChanged += OnRamFramesChanged;
-            FreeRamFramesLabel.Content = $"{_totalRamFrames} out of {_totalRamFrames}";
+            OS.OsStateChanged += OnOsStateChanged;
+            FreeRamFramesLabel.Content = $"{_ramFrames} out of {_ramFrames}";
         }
 
         private async void Simulate()
         {
             SimulationStartButton.IsEnabled = false;
             CommandsTabButton.IsEnabled = true;
+            ConfigButton.IsEnabled = false;
 
             Counter.PropertyChanged += OsCounterPropertyChanged;
-            _simulation = OS.Run(ramFrames:_totalRamFrames);       
+            _simulation = OS.Run(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);       
             await _simulation;
 
+            ConfigButton.IsEnabled = true;
             SimulationStartButton.IsEnabled = true;
         }
 
@@ -165,9 +174,48 @@ namespace VirtualMemorySimulator
         private void OnRamFramesChanged(object sender, EventArgs e)
         {
             _freeRamFrames = OS.FreeRamFrames;
-            FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_totalRamFrames}";
+            FreeRamFramesLabel.Content = $"{_freeRamFrames} out of {_ramFrames}";
 
             //here we will perform the gauge update once it works
+        }
+
+        private void OnOsStateChanged(object sender, EventArgs e)
+        {
+            OsState state = (OsState)sender;
+
+            switch(state)
+            {
+                case OsState.Busy:
+                    OsStateLabel.Content = "OS: Busy";
+                    OsStateBorder.Background = new SolidColorBrush(Color.FromRgb(214, 40, 40));
+                    break;
+                case OsState.Idle:
+                    OsStateLabel.Content = "OS: Idle";
+                    OsStateBorder.Background = new SolidColorBrush(Color.FromRgb(252, 163, 17));
+                    break;
+                default:
+                    OsStateLabel.Content = "OS: Free";
+                    OsStateBorder.Background = new SolidColorBrush(Color.FromRgb(6, 214, 160));
+                    break;
+            }
+
+            //here we will perform the gauge update once it works
+        }
+
+        private void OnConfigButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _configWindow = new ConfigWindow(_totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay);
+            _configWindow.Closing += _configWindow_Closing;
+            _configWindow.Show();
+        }
+
+        private void _configWindow_Closing(object sender, CancelEventArgs e)
+        {
+            _totalCommands = _configWindow.CommandsCount;
+            _ramFrames = _configWindow.RamFrames;
+            _pagesPerProc = _configWindow.PagesPerProc;
+            _osDelay = _configWindow.OsDelay;
+            _betweenOpsDelay = _configWindow.BetweenOpsDelay;
         }
     }
 }

@@ -325,20 +325,22 @@
 
                     <Grid Grid.Row="0" Background="#edddd4">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.15*"/>
+                            <ColumnDefinition Width="2.15*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2.15*"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid.Resources>
                             <Style x:Key="ButtonStyle" TargetType="Button">
-                                <Setter Property="Margin" Value="10"/>
+                                <Setter Property="Margin" Value="5"/>
                                 <Setter Property="Background" Value="#ee6c4d"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="FontSize" Value="30"/>
                             </Style>
                         </Grid.Resources>
 
-                        <Button x:Name="SimulationStartButton" Grid.Column="0" Style="{StaticResource ButtonStyle}" Content="Start simulation" Click="OnStartSimulationClicked">
+                        <Button x:Name="SimulationStartButton" Grid.Column="0" Style="{StaticResource ButtonStyle}" Content="Simulate" Click="OnStartSimulationClicked">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -346,13 +348,25 @@
                             </Button.Resources>
                         </Button>
 
-                        <Button x:Name="CommandsTabButton" Grid.Column="1" Style="{StaticResource ButtonStyle}" Content="Commands Tab" Click="OnCommandsTabClicked" IsEnabled="False">
+                        <Button x:Name="CommandsTabButton" Grid.Column="1" Style="{StaticResource ButtonStyle}" Content="Extend" Click="OnCommandsTabClicked" IsEnabled="False">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="15"/>
                                 </Style>
                             </Button.Resources>
                         </Button>
+
+                        <Button x:Name="ConfigButton" Grid.Column="2" Style="{StaticResource ButtonStyle}" Content="S" Click="OnConfigButtonClicked" Width="50">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="25"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Border x:Name="OsStateBorder" Grid.Column="3" CornerRadius="10" Background="#06d6a0" Margin="5">
+                            <Label x:Name="OsStateLabel" FontSize="30" FontFamily="Lucida Sans" Content="OS: Free" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White"/>
+                        </Border>
 
                     </Grid>
 

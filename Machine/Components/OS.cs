@@ -44,6 +44,11 @@ namespace Machine
         /// </summary>
         internal static int DelayTime { get; private set; }
         /// <summary>
+        /// The "sleep" time we use to simulate the "idle" state of the OS between operations.
+        /// The value represents the number of milliseconds the task will be delayed / set on sleep.
+        /// </summary>
+        internal static int BetweenOpsDelayTime { get; private set; }
+        /// <summary>
         /// The list of running processes in the simulation environment.
         /// </summary>
         internal static List<Process> Processes;
@@ -59,6 +64,8 @@ namespace Machine
 
         public static event EventHandler CommandFinished;
 
+        public static event EventHandler OsStateChanged;
+
         /// <summary>
         /// The initializing method of the OS. Can be called from outside the project to start the simulation.
         /// </summary>
@@ -67,15 +74,17 @@ namespace Machine
         /// <param name="ramFrames">The number of frames the RAM will be divided into. Initially all are free.</param>
         /// <param name="maxPagesPerProcess">The maximum number of pages the page table of a process can hold.</param>
         /// <param name="delayTime">The value in milliseconds used for simulating the OS handling data-heavy operations.</param>
-        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000)
+        public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000, int betweenOpsDelay = 750)
         {
             IsActive = true;
+            OsStateChanged?.Invoke(OsState.Idle, new EventArgs());
             ProcessCount = processCount;
             CommandsCount = commandsCount;
             FreeRamFrames = ramFrames;
             TotalRamCapacity = ramFrames;
             MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
+            BetweenOpsDelayTime = betweenOpsDelay;
             RamFramesTable = new List<RamFrame>();
 
             Counter.ResetCounter();
@@ -85,6 +94,7 @@ namespace Machine
             Commands = generator.GenerateCommands();
             await MMU.Run(Commands);
             IsActive = false;
+            OsStateChanged?.Invoke(OsState.Free, new EventArgs());
         }
 
         /// <summary>
@@ -123,11 +133,8 @@ namespace Machine
                 }
 
                 await OS.SimulateHandling();
-
                 page.Requested = -1;
                 page.IsValid = true;
-
-
                 Counter.IncrementDiskAccesses();
             }
         }
@@ -139,8 +146,10 @@ namespace Machine
         internal static async Task SimulateHandling()
         {
             IsActive = false;
+            OsStateChanged?.Invoke(OsState.Busy, new EventArgs());
             await Task.Delay(DelayTime);
             IsActive = true;
+            OsStateChanged?.Invoke(OsState.Idle, new EventArgs());
         }
 
         /// <summary>

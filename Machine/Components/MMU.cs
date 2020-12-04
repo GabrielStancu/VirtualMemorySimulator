@@ -23,6 +23,7 @@ namespace Machine
                 await AccessPage(commands[index]);
                 commands[index].Completed = true;
                 OS.OnCommandFinished(commands[index]);
+                await Task.Delay(OS.BetweenOpsDelayTime);
             }
         }
 
