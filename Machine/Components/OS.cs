@@ -76,9 +76,9 @@ namespace Machine
             Processes = generator.GenerateProcesses(processCount, maxPagesPerProcess);
             RamFramesTable = generator.GenerateRamFrames(TotalRamCapacity);
             Commands = generator.GenerateCommands(commandsCount, processCount, Processes);
-            await MMU.Run(Commands, Processes.AsReadOnly(), BetweenOpsDelayTime);
-            IsActive = false;
+            await MMU.Run(Commands, Processes.AsReadOnly(), BetweenOpsDelayTime);           
             OsStateChanged?.Invoke(OsState.Free, new EventArgs());
+            IsActive = false;
         }
 
         /// <summary>
@@ -103,8 +103,6 @@ namespace Machine
         {
             if (page.Requested != -1)
             {
-                page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
-
                 if (FreeRamFrames > 0)
                 {
                     LoadRamFrame(page, TotalRamCapacity - FreeRamFrames);

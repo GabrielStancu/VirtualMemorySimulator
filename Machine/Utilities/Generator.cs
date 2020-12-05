@@ -1,7 +1,6 @@
 ﻿using Machine.Components;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Machine.Utilities
 {
@@ -56,6 +55,11 @@ namespace Machine.Utilities
             return processes;
         }
 
+        /// <summary>
+        /// Generates / initializes the RAM's frames. 
+        /// </summary>
+        /// <param name="size">The number of frames to be generated / initialized.</param>
+        /// <returns>The list of required size of generated RAM frames.</returns>
         internal List<RamFrame> GenerateRamFrames(int size)
         {
             List<RamFrame> ramFrames = new List<RamFrame>(size);
@@ -81,7 +85,7 @@ namespace Machine.Utilities
         /// </summary>
         /// <param name="pid">Optional parameter. If given a value, the command will be assigned to given pid.
         /// Otherwise the process id is also randomly generated.</param>
-        /// <returns></returns>
+        /// <returns>The randomly-generated command.</returns>
         private Command GenerateCommand(List<Process> processes, int pid = -1)
         {
             //generate random operation: read / write 
@@ -114,7 +118,7 @@ namespace Machine.Utilities
         /// </summary>
         /// <param name="min">The lower limit, inclusive.</param>
         /// <param name="max">The upper limit, exclusive.</param>
-        /// <returns></returns>
+        /// <returns>An integer value between the minimum (inclusive) and maximum (exclusive) values provided to it.</returns>
         private int Generate(int min, int max)
         {
             return _rand.Next(min, max);

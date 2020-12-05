@@ -42,7 +42,7 @@ namespace Machine.Utilities
         public bool Completed
         {
             get { return completed; }
-            set 
+            internal set 
             {
                 if (completed != value)
                 {

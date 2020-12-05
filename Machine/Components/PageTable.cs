@@ -9,11 +9,6 @@ namespace Machine
     public class PageTable
     {
         /// <summary>
-        /// The list of pages from the PageTable.
-        /// </summary>
-        internal List<Page> Pages { get; private set; }
-
-        /// <summary>
         /// The constructor of the class, initializez the page table
         /// </summary>
         /// <param name="pageTableSize">The number of pages the process needs for loading its entire data in RAM.</param>
@@ -24,15 +19,17 @@ namespace Machine
         }
 
         /// <summary>
-        /// Initializez the list, puts a page at each index and assigns that index to that page.
+        /// The list of pages from the PageTable.
         /// </summary>
-        /// <param name="pageTableSize">The size of the process' page table.</param>
-        private void LoadPages(int pageTableSize)
+        internal List<Page> Pages { get; private set; }
+
+        /// <summary>
+        /// Gets the page table (the internal list of pages) of this class, read-only.
+        /// </summary>
+        /// <returns>A read-only copy of the list of pages from this page table.</returns>
+        public IReadOnlyList<Page> GetPageTableInfo()
         {
-            for(int index = 0; index < pageTableSize; index++)
-            {
-                Pages.Add(new Page(index));
-            }
+            return Pages.AsReadOnly();
         }
 
         /// <summary>
@@ -44,12 +41,15 @@ namespace Machine
             => Pages.Find(p => p.PageIndex == pageIndex);
 
         /// <summary>
-        /// Gets the page table (the internal list of pages) of this class, read-only.
+        /// Initializez the list, puts a page at each index and assigns that index to that page.
         /// </summary>
-        /// <returns>A read-only copy of the list of pages from this page table.</returns>
-        public IReadOnlyList<Page> GetPageTableInfo()
+        /// <param name="pageTableSize">The size of the process' page table.</param>
+        private void LoadPages(int pageTableSize)
         {
-            return Pages.AsReadOnly();
+            for(int index = 0; index < pageTableSize; index++)
+            {
+                Pages.Add(new Page(index));
+            }
         }
     }
 }

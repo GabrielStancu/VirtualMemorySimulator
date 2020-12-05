@@ -1,8 +1,6 @@
 ﻿using Machine.Components;
 using Machine.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Machine
@@ -57,6 +55,7 @@ namespace Machine
         private async static Task HandlePageRequested(Command command, Page page)
         {
             page.Requested = command.ProcessId;
+            page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
             await OS.LoadPage(page);
         }
 
@@ -70,6 +69,8 @@ namespace Machine
         /// <param name="page">The page for which the request was made.</param>
         private async static Task HandleReadWriteCommand(Command command, Page page)
         {
+            page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
+
             if (command.AccessType == PageAccessType.Write)
             {
                 if(page.IsDirty)
@@ -78,9 +79,7 @@ namespace Machine
                 }
 
                 page.IsDirty = true;
-            }
-
-            page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
+            }   
         } 
     }
 }

@@ -6,6 +6,17 @@
     public class Process
     {
         /// <summary>
+        /// Initializes the process class.
+        /// </summary>
+        /// <param name="pid">The pid to be assigned to the process.</param>
+        /// <param name="pageTableSize">The page table size assigned to the process.</param>
+        internal Process(int pid, PageTable pageTable)
+        {
+            Pid = pid;
+            PageTableSize = pageTable.Pages.Count;
+            PageTable = pageTable;
+        }
+        /// <summary>
         /// The process identifier.
         /// </summary>
         public int Pid { get; private set; }
@@ -17,16 +28,5 @@
         /// The actual page table assigned to this process.
         /// </summary>
         public PageTable PageTable { get; private set; }
-        /// <summary>
-        /// Initializes the process class.
-        /// </summary>
-        /// <param name="pid">The pid to be assigned to the process.</param>
-        /// <param name="pageTableSize">The page table size assigned to the process.</param>
-        internal Process(int pid, PageTable pageTable)
-        {
-            Pid = pid;
-            PageTableSize = pageTable.Pages.Count;
-            PageTable = pageTable;
-        }
     }
 }
