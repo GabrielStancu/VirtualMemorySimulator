@@ -45,12 +45,24 @@ namespace Machine
         /// </summary>
         internal static IReadOnlyList<Command> Commands;
 
+        /// <summary>
+        /// The list of frames available in the RAM of the simulated computer.
+        /// </summary>
         public static List<RamFrame> RamFramesTable;
 
+        /// <summary>
+        /// Event fired each time the number of available RAM frames has modified.
+        /// </summary>
         public static event EventHandler RamFramesChanged;
 
+        /// <summary>
+        /// Event fired each time a command was fully executed.
+        /// </summary>
         public static event EventHandler CommandFinished;
 
+        /// <summary>
+        /// Event fired each time the OS switches between its states: Free, Idle, Busy.
+        /// </summary>
         public static event EventHandler OsStateChanged;
 
         /// <summary>
@@ -61,6 +73,7 @@ namespace Machine
         /// <param name="ramFrames">The number of frames the RAM will be divided into. Initially all are free.</param>
         /// <param name="maxPagesPerProcess">The maximum number of pages the page table of a process can hold.</param>
         /// <param name="delayTime">The value in milliseconds used for simulating the OS handling data-heavy operations.</param>
+        /// <param name="betweenOpsDelay">The value in milliseconds used for simulating the OS switching between commands. Also for easier tracking of the simulation.</param>
         public static async Task Run(int processCount = 8, int commandsCount = 48, int ramFrames = 8, int maxPagesPerProcess = 8, int delayTime = 1000, int betweenOpsDelay = 750)
         {
             IsActive = true;
@@ -82,18 +95,25 @@ namespace Machine
         }
 
         /// <summary>
-        /// Simulates asynchronously the process of saving data from RAM to Disk when the page is dirty.
+        /// Returns data about the processes running in the environment.
         /// </summary>
-        /// <param name="page">The page whose content will be written back to the Disk.</param>
-        internal async static Task SavePageChangesToDisk(Page page)
-        {
-            if (page.IsDirty)
-            {
-                page.IsDirty = false;
-                await SimulateHandling();
-                Counter.IncrementDiskAccesses(); //1 Disk access               
-            }
-        }
+        /// <returns>A read-only list of Process objects, containing information about the running programs in the system.</returns>
+        public static IReadOnlyList<Process> GetRunningProcesses()
+            => Processes.AsReadOnly();
+
+        /// <summary>
+        /// Returns data about the commands run during the simulation.
+        /// </summary>
+        /// <returns>A read-only list of Command objects, containing information about the commands executed during the simulation.</returns>
+        public static IReadOnlyList<Command> GetCommands()
+            => Commands;
+
+        /// <summary>
+        /// Returns data about the frames of the simulated RAM.
+        /// </summary>
+        /// <returns>A read-only list of RAM frames.</returns>
+        public static IReadOnlyList<RamFrame> GetRamFrames()
+            => RamFramesTable.AsReadOnly();
 
         /// <summary>
         ///  Simulates asynchronously the process of loading a page from Disk to RAM, when requested.
@@ -111,50 +131,35 @@ namespace Machine
                 }
                 else
                 {
-                    await SwapPage(page); 
+                    await SwapPage(page);
                 }
-                
+
                 page.Requested = -1;
                 page.IsValid = true;
                 Counter.IncrementDiskAccesses();
                 Counter.IncrementPageFaults();
-                await OS.SimulateHandling();
+                await SimulateHandling();
             }
         }
 
         /// <summary>
-        /// The simulation of data-heavy operations performed by OS, such as moving data between memories.
-        /// Sets the OS on inactive, sleeps for the preset delay time, then sets the OS back to active.
+        /// Simulates asynchronously the process of saving data from RAM to Disk when the page is dirty.
         /// </summary>
-        internal static async Task SimulateHandling()
+        /// <param name="page">The page whose content will be written back to the Disk.</param>
+        internal async static Task SavePageChangesToDisk(Page page)
         {
-            IsActive = false;
-            OsStateChanged?.Invoke(OsState.Busy, new EventArgs());
-            await Task.Delay(DelayTime);
-            IsActive = true;
-            OsStateChanged?.Invoke(OsState.Idle, new EventArgs());
+            if (page.IsDirty)
+            {
+                page.IsDirty = false;
+                await SimulateHandling();
+                Counter.IncrementDiskAccesses(); //1 Disk access               
+            }
         }
-
-        /// <summary>
-        /// Returns data about the processes running in the environment.
-        /// </summary>
-        /// <returns>A read-only list of Process objects, containing information about the running programs in the system.</returns>
-        public static IReadOnlyList<Process> GetRunningProcesses()
-            => Processes.AsReadOnly();
-
-        /// <summary>
-        /// Returns data about the commands run during the simulation.
-        /// </summary>
-        /// <returns>A read-only list of Command objects, containing information about the commands executed during the simulation.</returns>
-        public static IReadOnlyList<Command> GetCommands()
-            => Commands;
-
-        public static IReadOnlyList<RamFrame> GetRamFrames()
-            => RamFramesTable.AsReadOnly();
 
         /// <summary>
         /// Simulates asynchronously the process of swapping a page when the RAM is fully loaded and another page needs to be loaded.
         /// </summary>
+        /// <param name="swapPage">The page to be placed in the RAM instead of an old, unused one.</param>
         private async static Task SwapPage(Page swapPage)
         {
             (Page pageToSwap, int pid) = GetPageToBeSwapped();
@@ -171,6 +176,24 @@ namespace Machine
             Counter.IncrementPageSwaps();
         }
 
+        /// <summary>
+        /// The simulation of data-heavy operations performed by OS, such as moving data between memories.
+        /// Sets the OS on inactive (busy), sleeps for the preset delay time, then sets the OS back to active (idle).
+        /// </summary>
+        private static async Task SimulateHandling()
+        {
+            IsActive = false;
+            OsStateChanged?.Invoke(OsState.Busy, new EventArgs());
+            await Task.Delay(DelayTime);
+            IsActive = true;
+            OsStateChanged?.Invoke(OsState.Idle, new EventArgs());
+        }     
+
+        /// <summary>
+        /// Method that loads the RAM frame by setting it's properties acording to the mapped page from the page table.
+        /// </summary>
+        /// <param name="frameInfo">The page containg the information to be written in the RAM frame of the mapped page.</param>
+        /// <param name="frameIndex">The index of the frame where the provided data will be written.</param>
         private static void LoadRamFrame(Page frameInfo, int frameIndex)
         {
             RamFramesTable[frameIndex].LastAccess = frameInfo.LastTimeAccessed;
@@ -178,18 +201,32 @@ namespace Machine
             RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
         }
 
+        /// <summary>
+        /// Method called each time a command has finished. Calls the CommandFinished event with the finished command as sender argument.
+        /// </summary>
+        /// <param name="cmd">The command that was successfully executed.</param>
         internal static void OnCommandFinished(Command cmd)
         {
             Counter.IncrementRamAccesses(); //1 RAM access 
             CommandFinished?.Invoke(cmd, new EventArgs());
         }
 
+        /// <summary>
+        /// Method that gets the index of the Ram frame mapped to the page to be swapped.
+        /// </summary>
+        /// <param name="pid">The pid of the process to whom the frame belongs.</param>
+        /// <param name="pageIndex">The index of the mapped page in the process page for this RAM frame.</param>
+        /// <returns>The index of the RAM frame to be swapped.</returns>
         private static int FindIndexInRam(int pid, int pageIndex)
         {
             return RamFramesTable.IndexOf(RamFramesTable
                 .Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
         }
 
+        /// <summary>
+        /// Method that gets the page that willl be swapped, from all the processes and their page tables.
+        /// </summary>
+        /// <returns>A tuple containing the page to be swapped and the pid of the process it belongs to.</returns>
         private static (Page PageToSwap, int Pid) GetPageToBeSwapped()
         {
             string lastAccess = CurrentTimeGetter.GetCrtTime();
