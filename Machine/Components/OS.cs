@@ -121,8 +121,6 @@ namespace Machine
         /// <param name="page">The page that's requested to be loaded to the RAM.</param>
         internal static async Task LoadPage(Page page)
         {
-            await SimulateHandling();
-
             if (page.Requested != -1)
             {
                 if (FreeRamFrames > 0)
@@ -139,6 +137,8 @@ namespace Machine
                 Counter.IncrementPageFaults(); //each time a page needs to be loaded, a Page Fault was encountered
                 Counter.IncrementDiskAccesses(); //each time a page needs to be loaded, the Disk needs to be accessed.                      
             }
+
+            await SimulateHandling();
         }
 
         /// <summary>
@@ -149,9 +149,9 @@ namespace Machine
         {
             if (page.IsDirty)
             {
-                await SimulateHandling();
                 page.IsDirty = false;           
-                Counter.IncrementDiskAccesses(); //each time a page is saved to the Disk, the Disk needs to be accessed          
+                Counter.IncrementDiskAccesses(); //each time a page is saved to the Disk, the Disk needs to be accessed  
+                await SimulateHandling();
             }
         }
 
