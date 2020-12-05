@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VirtualMemorySimulator.Windows"
         mc:Ignorable="d"
-        Title="RamInfo" MaxHeight="850" Width="420" ResizeMode="NoResize" SizeToContent="Width" WindowStartupLocation="CenterScreen">
+        Title="RamInfo" MaxHeight="740" Width="420" ResizeMode="NoResize" SizeToContent="Width" WindowStartupLocation="CenterScreen">
     <Grid Margin="10" MaxHeight="840" MaxWidth="410">
         <DataGrid Name="dgRam" CanUserAddRows="False" ColumnWidth="Auto"/>
     </Grid>

@@ -218,6 +218,14 @@ namespace VirtualMemorySimulator.Windows
         }
 
         /// <summary>
+        /// Event fired when the window closes. The application is closed when this window is closed.
+        /// </summary>
+        private void OnWindowClosed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        /// <summary>
         /// Event fired by the OS each time one of the counted values has changed, so that the UI is updated.
         /// </summary>
         private void OnOsCounterPropertyChanged(object sender, EventArgs e)

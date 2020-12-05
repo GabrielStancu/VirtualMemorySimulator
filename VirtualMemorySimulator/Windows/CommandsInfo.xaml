@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VirtualMemorySimulator.Windows"
         mc:Ignorable="d"
-        Title="CommandsInfo" MaxHeight="850" Width="370" ResizeMode="NoResize" SizeToContent="Width">
+        Title="CommandsInfo" MaxHeight="740" Width="370" ResizeMode="NoResize" SizeToContent="Width">
     <Grid Margin="10" MaxHeight="840" MaxWidth="360">
         <DataGrid Name="dgCmds"/>
     </Grid>
