@@ -60,6 +60,8 @@ namespace Machine
             page.Requested = command.ProcessId;
             page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
             await OS.LoadPage(page);
+            page.Requested = -1;
+            page.IsValid = true;
         }
 
         /// <summary>

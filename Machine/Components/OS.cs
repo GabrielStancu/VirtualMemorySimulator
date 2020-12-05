@@ -121,6 +121,8 @@ namespace Machine
         /// <param name="page">The page that's requested to be loaded to the RAM.</param>
         internal static async Task LoadPage(Page page)
         {
+            await SimulateHandling();
+
             if (page.Requested != -1)
             {
                 if (FreeRamFrames > 0)
@@ -134,11 +136,8 @@ namespace Machine
                     await SwapPage(page);
                 }
 
-                page.Requested = -1;
-                page.IsValid = true;
-                Counter.IncrementDiskAccesses();
-                Counter.IncrementPageFaults();
-                await SimulateHandling();
+                Counter.IncrementPageFaults(); //each time a page needs to be loaded, a Page Fault was encountered
+                Counter.IncrementDiskAccesses(); //each time a page needs to be loaded, the Disk needs to be accessed.                      
             }
         }
 
@@ -150,9 +149,9 @@ namespace Machine
         {
             if (page.IsDirty)
             {
-                page.IsDirty = false;
                 await SimulateHandling();
-                Counter.IncrementDiskAccesses(); //1 Disk access               
+                page.IsDirty = false;           
+                Counter.IncrementDiskAccesses(); //each time a page is saved to the Disk, the Disk needs to be accessed          
             }
         }
 
@@ -172,12 +171,13 @@ namespace Machine
 
             pageToSwap.IsValid = false;
             pageToSwap.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
-            LoadRamFrame(swapPage, FindIndexInRam(pid, pageToSwap.PageIndex));
-            Counter.IncrementPageSwaps();
+            Counter.IncrementPageSwaps();//Incremented for each swap. Ensures the correctness of the program's logic.
+
+            LoadRamFrame(swapPage, FindIndexInRam(pid, pageToSwap.PageIndex));       
         }
 
         /// <summary>
-        /// The simulation of data-heavy operations performed by OS, such as moving data between memories.
+        /// The simulation of time-consuming operations with data performed by OS, such as moving data between memories.
         /// Sets the OS on inactive (busy), sleeps for the preset delay time, then sets the OS back to active (idle).
         /// </summary>
         private static async Task SimulateHandling()
@@ -196,6 +196,7 @@ namespace Machine
         /// <param name="frameIndex">The index of the frame where the provided data will be written.</param>
         private static void LoadRamFrame(Page frameInfo, int frameIndex)
         {
+            Counter.IncrementRamAccesses(); //each time a RAM frame is loaded, the RAM is accessed.
             RamFramesTable[frameIndex].LastAccess = frameInfo.LastTimeAccessed;
             RamFramesTable[frameIndex].ProcessId = frameInfo.Requested;
             RamFramesTable[frameIndex].PtIndex = frameInfo.PageIndex;
@@ -207,7 +208,7 @@ namespace Machine
         /// <param name="cmd">The command that was successfully executed.</param>
         internal static void OnCommandFinished(Command cmd)
         {
-            Counter.IncrementRamAccesses(); //1 RAM access 
+            Counter.IncrementRamAccesses(); //for each command we actually need to access the RAM
             CommandFinished?.Invoke(cmd, new EventArgs());
         }
 
@@ -219,6 +220,7 @@ namespace Machine
         /// <returns>The index of the RAM frame to be swapped.</returns>
         private static int FindIndexInRam(int pid, int pageIndex)
         {
+            Counter.IncrementRamAccesses(); //each time we look for the frame that needs to be replaced, we access the RAM.
             return RamFramesTable.IndexOf(RamFramesTable
                 .Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
         }
