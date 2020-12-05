@@ -7,7 +7,7 @@
         xmlns:gaugeLocal="clr-namespace:VirtualMemorySimulator.Gauge"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="Window_StateChanged">
+        Height="850" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="OnWindowStateChanged">
 
     <StackPanel>
         <Grid x:Name="HeaderGrid" Background="#c1c1c1">
@@ -36,7 +36,7 @@
                         <Setter Property="Background" Value="CadetBlue"/>
                         <Setter Property="Margin" Value="5"/>
                         <Setter Property="Grid.Row" Value="0"/>
-                        <EventSetter Event="MouseLeftButtonDown" Handler="ProcessBorder_MouseLeftButtonDown"/>
+                        <EventSetter Event="MouseLeftButtonDown" Handler="OnProcessBorderMouseLeftButtonDown"/>
                     </Style>
 
                     <Style x:Key="ProcessLabelStyle" TargetType="Label">

@@ -1,27 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Machine;
-using Machine.Components;
 using Machine.Utilities;
 
 namespace VirtualMemorySimulator.Windows
 {
     /// <summary>
-    /// Interaction logic for CommandsInfo.xaml
+    /// The window where the commands details and status can be checked in a DataGrid control.
     /// </summary>
     public partial class CommandsInfo : Window
     {
+        /// <summary>
+        /// Sets the source of the DataGrid with the commands taken from OS
+        /// and maps the handler for the Event fired by OS each time a command is finished.
+        /// </summary>
         public CommandsInfo()
         {
             InitializeComponent();
@@ -29,6 +21,11 @@ namespace VirtualMemorySimulator.Windows
             OS.CommandFinished += OnCommandFinished;
         }
 
+        /// <summary>
+        /// Each time the OS fires the CommandFinished event, it is handled here by ticking the Completed value of the command in the DataGrid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCommandFinished(object sender, EventArgs e)
         {
             Command lastCommand = (Command)sender;

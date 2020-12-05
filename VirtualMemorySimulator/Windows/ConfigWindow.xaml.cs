@@ -1,98 +1,147 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace VirtualMemorySimulator.Windows
 {
     /// <summary>
-    /// Interaction logic for ConfigWindow.xaml
+    /// The window where the parameters of the simulation are configured.
     /// </summary>
     public partial class ConfigWindow : Window
     {
-        private int _processCount;
-        private int _commandsCount;
-        private int _ramFrames;
-        private int _pagesPerProc;
-        private int _osDelay;
-        private int _betweenOpsDelay;
-
+        /// <summary>
+        /// The maximum number of process supported by the simulation.
+        /// </summary>
         private readonly int _maxProcesses;
 
-        public int ProcessCount { get => _processCount; internal set => _processCount = value; }
-        public int CommandsCount { get => _commandsCount; internal set => _commandsCount = value; }
-        public int RamFrames { get => _ramFrames; internal set => _ramFrames = value; }
-        public int PagesPerProc { get => _pagesPerProc; internal set => _pagesPerProc = value; }
-        public int OsDelay { get => _osDelay; internal set => _osDelay = value; }
-        public int BetweenOpsDelay { get => _betweenOpsDelay; internal set => _betweenOpsDelay = value; }
+        /// <summary>
+        /// The number of processes that will be run during the simulation.
+        /// </summary>
+        public int ProcessCount { get; internal set; }
 
+        /// <summary>
+        /// The number of commands that will be executed during the simulation.
+        /// </summary>
+        public int CommandsCount { get; internal set; }
+
+        /// <summary>
+        /// The number of frames the RAM will be divided into during the simulation.
+        /// </summary>
+        public int RamFrames { get; internal set; }
+
+        /// <summary>
+        /// The maximum number of pages a process' page table can be divided into.
+        /// </summary>
+        public int PagesPerProc { get; internal set; }
+
+        /// <summary>
+        /// The delay time in milliseconds used to simulate the OS transferring data between RAM and Disk.
+        /// </summary>
+        public int OsDelay { get; internal set; }
+
+        /// <summary>
+        /// The delay time in milliseconds used to simulate the time needed by the OS to switch between commands.
+        /// </summary>
+        public int BetweenOpsDelay { get; internal set; }
+
+        /// <summary>
+        /// Initializes the values of the window.
+        /// </summary>
+        /// <param name="processCount">The number of processes that will be run during the simulation.</param>
+        /// <param name="commandsCount">The number of commands that will be executed during the simulation.</param>
+        /// <param name="ramFrames">The number of frames the RAM will be divided into during the simulation.</param>
+        /// <param name="pagesPerProc">The maximum number of pages a process' page table can be divided into.</param>
+        /// <param name="osDelay">The delay time in milliseconds used to simulate the OS transferring data between RAM and Disk.</param>
+        /// <param name="betweenOpsDelay">The delay time in milliseconds used to simulate the time needed by the OS to switch between commands.</param>
+        /// <param name="maxProcesses">The maximum number of process supported by the simulation.</param>
         public ConfigWindow(int processCount, int commandsCount, int ramFrames, int pagesPerProc, int osDelay, int betweenOpsDelay, int maxProcesses)
         {
-            _processCount = processCount;
-            _commandsCount = commandsCount;
-            _ramFrames = ramFrames;
-            _pagesPerProc = pagesPerProc;
-            _osDelay = osDelay;
-            _betweenOpsDelay = betweenOpsDelay;
+            ProcessCount = processCount;
+            CommandsCount = commandsCount;
+            RamFrames = ramFrames;
+            PagesPerProc = pagesPerProc;
+            OsDelay = osDelay;
+            BetweenOpsDelay = betweenOpsDelay;
             _maxProcesses = maxProcesses;
 
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Event fired each time the max processes number textbox loses focus.
+        /// </summary>
         private void OnProcessTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(processesCountTextBlock, _processCount, _maxProcesses);
+            ParseTextBoxContent(processesCountTextBlock, ProcessCount, _maxProcesses);
         }
 
+        /// <summary>
+        /// Event fired each time the commands number textbox loses focus.
+        /// </summary>
         private void OnCommandsTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(commandsCountTextBlock, _commandsCount);
+            ParseTextBoxContent(commandsCountTextBlock, CommandsCount);
         }
 
+        /// <summary>
+        /// Event fired each time the RAM frames number textbox loses focus.
+        /// </summary>
         private void OnRamFramesTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(ramFramesCountTextBlock, _ramFrames);
+            ParseTextBoxContent(ramFramesCountTextBlock, RamFrames);
         }
 
+        /// <summary>
+        /// Event fired each time the max pages per process number textbox loses focus.
+        /// </summary>
         private void OnPagesPerProcTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(maxPagesPerProcessTextBlock, _pagesPerProc);
+            ParseTextBoxContent(maxPagesPerProcessTextBlock, PagesPerProc);
         }
 
+        /// <summary>
+        /// Event fired each time the OS delay time textbox loses focus.
+        /// </summary>
         private void OnOsDelayTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(delayTimeTextBlock, _osDelay);
+            ParseTextBoxContent(delayTimeTextBlock, OsDelay);
         }
 
+        /// <summary>
+        /// Event fired each time the between operations textbox loses focus.
+        /// </summary>
         private void OnBetweenOpsTbLostFocus(object sender, RoutedEventArgs e)
         {
-            ParseTextBoxContent(betweenOpsDelayTextBlock, _betweenOpsDelay);
+            ParseTextBoxContent(betweenOpsDelayTextBlock, BetweenOpsDelay);
         }
 
+        /// <summary>
+        /// Event fired when the window is closed. 
+        /// This event does not trigger the "lose focus" events of the textboxes, so they need to be triggerred manually.
+        /// </summary>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ParseTextBoxContent(processesCountTextBlock, _processCount, _maxProcesses);
-            ParseTextBoxContent(commandsCountTextBlock, _commandsCount);
-            ParseTextBoxContent(ramFramesCountTextBlock, _ramFrames);
-            ParseTextBoxContent(maxPagesPerProcessTextBlock, _pagesPerProc);
-            ParseTextBoxContent(delayTimeTextBlock, _osDelay);
-            ParseTextBoxContent(betweenOpsDelayTextBlock, _betweenOpsDelay);
+            ParseTextBoxContent(processesCountTextBlock, ProcessCount, _maxProcesses);
+            ParseTextBoxContent(commandsCountTextBlock, CommandsCount);
+            ParseTextBoxContent(ramFramesCountTextBlock, RamFrames);
+            ParseTextBoxContent(maxPagesPerProcessTextBlock, PagesPerProc);
+            ParseTextBoxContent(delayTimeTextBlock, OsDelay);
+            ParseTextBoxContent(betweenOpsDelayTextBlock, BetweenOpsDelay);
 
-            _processCount = Int32.Parse(processesCountTextBlock.Text);
-            _commandsCount = Int32.Parse(commandsCountTextBlock.Text);
-            _ramFrames = Int32.Parse(ramFramesCountTextBlock.Text);
-            _pagesPerProc = Int32.Parse(maxPagesPerProcessTextBlock.Text);
-            _osDelay = Int32.Parse(delayTimeTextBlock.Text);
-            _betweenOpsDelay = Int32.Parse(betweenOpsDelayTextBlock.Text);
+            ProcessCount = Int32.Parse(processesCountTextBlock.Text);
+            CommandsCount = Int32.Parse(commandsCountTextBlock.Text);
+            RamFrames = Int32.Parse(ramFramesCountTextBlock.Text);
+            PagesPerProc = Int32.Parse(maxPagesPerProcessTextBlock.Text);
+            OsDelay = Int32.Parse(delayTimeTextBlock.Text);
+            BetweenOpsDelay = Int32.Parse(betweenOpsDelayTextBlock.Text);
         }
 
+        /// <summary>
+        /// Method used to validate the content of the editting textbox.
+        /// </summary>
+        /// <param name="textBox">The textbox under edit.</param>
+        /// <param name="value">The property of the window that will store the editted value, if it is correct (numerical and below maximum allowed value).</param>
+        /// <param name="maxValue">Optional, provided for certain properties that allow only finite values (e.g. the processes number).</param>
         private void ParseTextBoxContent(TextBox textBox, int value, int maxValue = -1)
         {
             if (!Int32.TryParse(textBox.Text, out int tempValue) || tempValue <= 0 || (maxValue > 0 && tempValue > maxValue))
