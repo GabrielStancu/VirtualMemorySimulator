@@ -1,4 +1,5 @@
-﻿using Machine.Utilities;
+﻿using Machine.Components;
+using Machine.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,18 +13,21 @@ namespace Machine
     /// </summary>
     internal static class MMU
     {
+        //internal static event EventHandler CommandFinished;
         /// <summary>
         /// Asynchronous method that runs each command on a separate Task / thread.
         /// </summary>
         /// <param name="commands">The commands to be run during the simulation.</param>
-        internal async static Task Run(IReadOnlyList<Command> commands)
+        internal async static Task Run(IReadOnlyList<Command> commands, IReadOnlyList<Process> processes, int betweenOpsDelayTime)
         {
             for (int index = 0; index < commands.Count; index++)
             {
-                await AccessPage(commands[index]);
+                int pid = commands[index].ProcessId;
+                Page page = processes[pid].PageTable.GetPageByIndex(commands[index].PageIndex);
+                await AccessPage(commands[index], page);
                 commands[index].Completed = true;
                 OS.OnCommandFinished(commands[index]);
-                await Task.Delay(OS.BetweenOpsDelayTime);
+                await Task.Delay(betweenOpsDelayTime);
             }
         }
 
@@ -33,17 +37,15 @@ namespace Machine
         /// then it checks whether the page is loaded. If not, the page is loaded then the read / write command is executed. 
         /// </summary>
         /// <param name="command">The command to be processed by the MMU.</param>
-        private async static Task AccessPage(Command command)
+        private async static Task AccessPage(Command command, Page page)
         {
-            Page page = OS.Processes[command.ProcessId].PageTable.GetPageByIndex(command.PageIndex);
-            Counter.IncrementRamAccesses(); //1 RAM access 
-
             if (!page.IsValid)
             {
                 await HandlePageRequested(command, page);
             }
  
             await HandleReadWriteCommand(command, page);
+            Counter.IncrementRamAccesses(); //1 RAM access 
         }
 
         /// <summary>

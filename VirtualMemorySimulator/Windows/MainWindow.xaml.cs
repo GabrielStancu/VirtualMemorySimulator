@@ -214,7 +214,7 @@ namespace VirtualMemorySimulator.Windows
                     await Task.Delay(delayTime);
                 }
 
-                GaugeViewModel.Value = GaugeViewModel.Value++;
+                GaugeViewModel.Value++;
                 await Task.Delay(delayTime);
             }     
         }

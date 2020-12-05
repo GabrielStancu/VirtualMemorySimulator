@@ -19,18 +19,6 @@ namespace Machine
         /// </summary>
         public static bool IsActive { get; private set; }
         /// <summary>
-        /// The total number of processes to be run during the simulation.
-        /// </summary>
-        internal static int ProcessCount { get; private set; }
-        /// <summary>
-        /// The total number of commands to be run during the simulation.
-        /// </summary>
-        internal static int CommandsCount { get; private set; }
-        /// <summary>
-        /// The maximum number of pages a process can have.
-        /// </summary>
-        internal static int MaxPagesPerProcess { get; private set; }
-        /// <summary>
         /// Holds the number of remaining unloaded frames.
         /// </summary>
         public static int FreeRamFrames { get; private set; }
@@ -78,21 +66,18 @@ namespace Machine
         {
             IsActive = true;
             OsStateChanged?.Invoke(OsState.Idle, new EventArgs());
-            ProcessCount = processCount;
-            CommandsCount = commandsCount;
             FreeRamFrames = ramFrames;
             TotalRamCapacity = ramFrames;
-            MaxPagesPerProcess = maxPagesPerProcess;
             DelayTime = delayTime;
             BetweenOpsDelayTime = betweenOpsDelay;
             RamFramesTable = new List<RamFrame>();
 
             Counter.ResetCounter();
             Generator generator = new Generator();
-            Processes = generator.GenerateProcesses();
+            Processes = generator.GenerateProcesses(processCount, maxPagesPerProcess);
             RamFramesTable = generator.GenerateRamFrames(TotalRamCapacity);
-            Commands = generator.GenerateCommands();
-            await MMU.Run(Commands);
+            Commands = generator.GenerateCommands(commandsCount, processCount, Processes);
+            await MMU.Run(Commands, Processes.AsReadOnly(), BetweenOpsDelayTime);
             IsActive = false;
             OsStateChanged?.Invoke(OsState.Free, new EventArgs());
         }

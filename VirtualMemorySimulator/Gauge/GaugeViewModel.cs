@@ -42,19 +42,7 @@ namespace VirtualMemorySimulator.Gauge
             set
             {
                 if (value >= 0 && value <= _maxValue && _value != value)
-                {
-                    //int mappedValue = (int)(1.0 * (_maxValue - value) / _maxValue * 100);
-                    //Task.Run(() =>
-                    //{
-                    //    for(int crtValue = _value; crtValue <=mappedValue; crtValue++)
-                    //    {
-                    //        _value = crtValue;
-                    //        Angle = (int)(1.0 * _value / 100 * 180) - 90;
-                    //        NotifyPropertyChanged("Value");
-                    //        Task.Delay(200);
-                    //    }
-                    //});
-                    
+                {              
                     _value = value;
                     Angle = (int)(1.0 * _value / 100 * 180) - 90;
                     NotifyPropertyChanged("Value");

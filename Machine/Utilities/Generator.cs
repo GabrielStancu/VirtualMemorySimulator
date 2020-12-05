@@ -19,20 +19,20 @@ namespace Machine.Utilities
         /// Generates a list of random commands for the simulation.
         /// </summary>
         /// <returns>The list of randomly-generated commands.</returns>
-        internal IReadOnlyList<Command> GenerateCommands()
+        internal IReadOnlyList<Command> GenerateCommands(int commandsCount, int processesCount, List<Process> processes)
         {
-            List<Command> commands = new List<Command>(OS.CommandsCount);
+            List<Command> commands = new List<Command>(commandsCount);
 
             //we make sure each process executes at least one operation
-            for (int cmdId = 0; cmdId < OS.ProcessCount; cmdId++)
+            for (int cmdId = 0; cmdId < processesCount; cmdId++)
             {
-                commands.Add(GenerateCommand(cmdId));
+                commands.Add(GenerateCommand(processes, cmdId));
             }
 
             //now it can go "full-random" with respect to the process id
-            for(int cmdId = OS.ProcessCount; cmdId < OS.CommandsCount; cmdId++)
+            for(int cmdId = processesCount; cmdId < commandsCount; cmdId++)
             {
-                commands.Add(GenerateCommand());
+                commands.Add(GenerateCommand(processes));
             }
 
             return commands.AsReadOnly();
@@ -42,13 +42,15 @@ namespace Machine.Utilities
         /// Generates the processes that will be run during our simulation.
         /// </summary>
         /// <returns>The list of processes to be run during the simulation.</returns>
-        internal List<Process> GenerateProcesses()
+        internal List<Process> GenerateProcesses(int processesCount, int maxPagesPerProcess)
         {
-            List<Process> processes = new List<Process>(OS.ProcessCount);
+            List<Process> processes = new List<Process>(processesCount);
 
-            for (int pid = 0; pid < OS.ProcessCount; pid++)
+            for (int pid = 0; pid < processesCount; pid++)
             {
-                processes.Add(new Process(pid, Generate(1, OS.MaxPagesPerProcess)));
+                PageTable pageTable = new PageTable(Generate(1, maxPagesPerProcess));
+                Process process = new Process(pid, pageTable);
+                processes.Add(process);
             }
 
             return processes;
@@ -80,7 +82,7 @@ namespace Machine.Utilities
         /// <param name="pid">Optional parameter. If given a value, the command will be assigned to given pid.
         /// Otherwise the process id is also randomly generated.</param>
         /// <returns></returns>
-        private Command GenerateCommand(int pid = -1)
+        private Command GenerateCommand(List<Process> processes, int pid = -1)
         {
             //generate random operation: read / write 
             PageAccessType op = GenerateOperationType();
@@ -88,11 +90,11 @@ namespace Machine.Utilities
             //pid = -1 => generate random pid (0..OS.ProcessCount) else use that pid 
             if (pid == -1)
             {
-                pid = Generate(0, OS.ProcessCount);
+                pid = Generate(0, processes.Count);
             }
 
             //generate random page number (0..Process.PageTableSize)
-            int pageIndex = Generate(0, OS.Processes[pid].PageTableSize);
+            int pageIndex = Generate(0, processes[pid].PageTableSize);
 
             return new Command(pid, pageIndex, op);
         }

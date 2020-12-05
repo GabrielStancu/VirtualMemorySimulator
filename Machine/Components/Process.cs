@@ -18,29 +18,15 @@
         /// </summary>
         public PageTable PageTable { get; private set; }
         /// <summary>
-        /// Used for knowing whether the process is running or not, 
-        /// in order to free its resources when finished etc.
-        /// </summary>
-        public bool IsRunning { get; private set; }
-
-        /// <summary>
         /// Initializes the process class.
         /// </summary>
         /// <param name="pid">The pid to be assigned to the process.</param>
         /// <param name="pageTableSize">The page table size assigned to the process.</param>
-        internal Process(int pid, int pageTableSize)
+        internal Process(int pid, PageTable pageTable)
         {
             Pid = pid;
-            PageTableSize = pageTableSize;
-            PageTable = new PageTable(pageTableSize);
-            IsRunning = false;
+            PageTableSize = pageTable.Pages.Count;
+            PageTable = pageTable;
         }
-
-        /// <summary>
-        /// Switches the state of the process: if running, it's turned off, 
-        /// if it's not running then it is started.
-        /// </summary>
-        internal void SwitchProcessState()
-            => IsRunning = !IsRunning;
     }
 }
