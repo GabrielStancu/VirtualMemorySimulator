@@ -60,7 +60,7 @@ namespace Machine.Utilities
         {
             List<RamFrame> ramFrames = new List<RamFrame>(size);
             const int UNDEFINED = -1;
-            string initTime = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            string initTime = CurrentTimeGetter.GetCrtTime();
 
             for (int frameIndex = 0; frameIndex < size; frameIndex++)
             {

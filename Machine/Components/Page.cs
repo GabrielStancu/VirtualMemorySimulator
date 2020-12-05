@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Machine.Utilities;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,7 @@ namespace Machine
             PageIndex = index;
             IsDirty = false;
             Requested = -1;
-            LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);    
+            LastTimeAccessed = CurrentTimeGetter.GetCrtTime();   
         }
         /// <summary>
         /// Indicates whether this page is loaded in the RAM or not

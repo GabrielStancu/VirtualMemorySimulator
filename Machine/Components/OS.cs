@@ -2,7 +2,6 @@
 using Machine.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Machine
@@ -104,7 +103,7 @@ namespace Machine
         {
             if (page.Requested != -1)
             {
-                page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
 
                 if (FreeRamFrames > 0)
                 {
@@ -116,11 +115,12 @@ namespace Machine
                 {
                     await SwapPage(page); 
                 }
-
-                await OS.SimulateHandling();
+                
                 page.Requested = -1;
                 page.IsValid = true;
                 Counter.IncrementDiskAccesses();
+                Counter.IncrementPageFaults();
+                await OS.SimulateHandling();
             }
         }
 
@@ -168,7 +168,7 @@ namespace Machine
             }
 
             pageToSwap.IsValid = false;
-            pageToSwap.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture); ;
+            pageToSwap.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
             LoadRamFrame(swapPage, FindIndexInRam(pid, pageToSwap.PageIndex));
             Counter.IncrementPageSwaps();
         }
@@ -182,17 +182,19 @@ namespace Machine
 
         internal static void OnCommandFinished(Command cmd)
         {
+            Counter.IncrementRamAccesses(); //1 RAM access 
             CommandFinished?.Invoke(cmd, new EventArgs());
         }
 
         private static int FindIndexInRam(int pid, int pageIndex)
         {
-            return RamFramesTable.IndexOf(RamFramesTable.Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
+            return RamFramesTable.IndexOf(RamFramesTable
+                .Find(p => p.ProcessId == pid && p.PtIndex == pageIndex));
         }
 
         private static (Page PageToSwap, int Pid) GetPageToBeSwapped()
         {
-            string lastAccess = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            string lastAccess = CurrentTimeGetter.GetCrtTime();
             Page pageToSwap = new Page(-1);
             int pid = -1;
 

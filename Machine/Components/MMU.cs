@@ -13,7 +13,6 @@ namespace Machine
     /// </summary>
     internal static class MMU
     {
-        //internal static event EventHandler CommandFinished;
         /// <summary>
         /// Asynchronous method that runs each command on a separate Task / thread.
         /// </summary>
@@ -45,7 +44,6 @@ namespace Machine
             }
  
             await HandleReadWriteCommand(command, page);
-            Counter.IncrementRamAccesses(); //1 RAM access 
         }
 
         /// <summary>
@@ -59,7 +57,6 @@ namespace Machine
         private async static Task HandlePageRequested(Command command, Page page)
         {
             page.Requested = command.ProcessId;
-            Counter.IncrementPageFaults();
             await OS.LoadPage(page);
         }
 
@@ -81,11 +78,9 @@ namespace Machine
                 }
 
                 page.IsDirty = true;
-                await OS.SimulateHandling();
             }
 
-            page.LastTimeAccessed = DateTime.UtcNow.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            Counter.IncrementRamAccesses(); //1 RAM access
+            page.LastTimeAccessed = CurrentTimeGetter.GetCrtTime();
         } 
     }
 }
