@@ -33,11 +33,19 @@
                         <Setter Property="BorderThickness" Value="2"/>
                         <Setter Property="CornerRadius" Value="75"/>
                         <Setter Property="Height" Value="140"/>
-                        <Setter Property="Background" Value="CadetBlue"/>
                         <Setter Property="Margin" Value="5"/>
                         <Setter Property="Grid.Row" Value="0"/>
                         <EventSetter Event="MouseLeftButtonDown" Handler="OnProcessBorderMouseLeftButtonDown"/>
-                    </Style>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,1">
+                                    <GradientStop Offset="0" Color="CadetBlue" />
+                                    <GradientStop Offset="0.5" Color="#3d5a80" />
+                                    <GradientStop Offset="1" Color="#564787" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                </Style>
 
                     <Style x:Key="ProcessLabelStyle" TargetType="Label">
                         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -45,12 +53,25 @@
                         <Setter Property="FontSize" Value="48"/>
                         <Setter Property="FontFamily" Value="Lucida Sans"/>
                         <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="10" Color="White" ShadowDepth="0"/>
+                        </Setter.Value>
+                        </Setter>
                     </Style>
 
                     <Style x:Key="ProcessBorderInfoHeaderStyle" TargetType="Border">
                         <Setter Property="BorderBrush" Value="Black"/>
                         <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="Background" Value="CadetBlue"/>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,1">
+                                    <GradientStop Offset="0" Color="CadetBlue" />
+                                    <GradientStop Offset="0.5" Color="#3d5a80" />
+                                    <GradientStop Offset="1" Color="#564787" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
 
                     <Style x:Key="ProcessBorderInfoValueStyle" TargetType="Border">
@@ -60,14 +81,14 @@
                     </Style>
 
                     <Style x:Key="ProcessLabelInfoHeaderStyle" TargetType="Label">
-                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontSize" Value="18"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="VerticalContentAlignment" Value="Center"/>
                     </Style>
 
                     <Style x:Key="ProcessLabelInfoValueStyle" TargetType="Label">
-                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontSize" Value="18"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                         <Setter Property="Foreground" Value="Black"/>
                         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -325,7 +346,7 @@
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Background="#edddd4">
+                    <Grid Grid.Row="0" Background="#adb6c4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2.15*"/>
                             <ColumnDefinition Width="2.15*"/>
@@ -336,9 +357,9 @@
                         <Grid.Resources>
                             <Style x:Key="ButtonStyle" TargetType="Button">
                                 <Setter Property="Margin" Value="5"/>
-                                <Setter Property="Background" Value="#ee6c4d"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="FontSize" Value="30"/>
+                                <Setter Property="Background" Value="#5a189a"/>
                             </Style>
                         </Grid.Resources>
 
@@ -372,12 +393,12 @@
 
                     </Grid>
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#c97c5d">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Background="#7209b7">
                         <Label Content="Free Ram Frames:" FontSize="30" VerticalContentAlignment="Center" Foreground="LightGray"/>
                         <Label x:Name="FreeRamFramesLabel" Content="12 out of 32" FontSize="30" VerticalContentAlignment="Center" Foreground="White"/>
                     </StackPanel>
 
-                    <Border Grid.Row="2" Background="#ffe6a7">
+                    <Border Grid.Row="2" Background="#adb6c4">
                         <gaugeLocal:Gauge x:Name="RamGauge" Margin="10"/>
                     </Border>
 
@@ -398,7 +419,7 @@
                             <Style x:Key="AccessBorderInfoHeaderStyle" TargetType="Border">
                                 <Setter Property="BorderBrush" Value="Black"/>
                                 <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="Background" Value="#99582a"/>
+                                <Setter Property="Background" Value="#5a189a"/>
                             </Style>
 
                             <Style x:Key="AccessBorderInfoValueStyle" TargetType="Border">
@@ -408,14 +429,14 @@
                             </Style>
 
                             <Style x:Key="AccessLabelInfoHeaderStyle" TargetType="Label">
-                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontSize" Value="18"/>
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                             </Style>
 
                             <Style x:Key="AccessLabelInfoValueStyle" TargetType="Label">
-                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontSize" Value="18"/>
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                                 <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>

@@ -7,27 +7,27 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400">
     <Grid>
-        <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="180" Width="400" BorderBrush="#432818"
+        <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="180" Width="400" BorderBrush="#5a189a"
                 BorderThickness="2 2 2 0" CornerRadius="300 300 0 0" Background="#d3d3d3"/>
-        <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="182" Width="402" BorderBrush="#432818"
+        <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="182" Width="402" BorderBrush="#5a189a"
                 BorderThickness="0 2 0 0" CornerRadius="300 300 0 0">
             <Border.Effect>
                 <DropShadowEffect Color="#e0fbfc" BlurRadius="10" ShadowDepth="2"/>
             </Border.Effect>
         </Border>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35" FontSize="40" 
-                   FontFamily="Agency FB" Foreground="#432818" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}">
+                   FontFamily="Agency FB" Foreground="#5a189a" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}">
             <TextBlock.Effect>
-                <DropShadowEffect BlurRadius="20" Color="#432818" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Color="#5a189a" ShadowDepth="0"/>
             </TextBlock.Effect>
         </TextBlock>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="35,35,35,0" FontSize="40" 
-                   FontFamily="Agency FB" Foreground="#432818" Text="Ram Usage (%)">
+                   FontFamily="Agency FB" Foreground="#5a189a" Text="Ram Usage (%)">
             <TextBlock.Effect>
-                <DropShadowEffect BlurRadius="20" Color="#432818" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Color="#5a189a" ShadowDepth="0"/>
             </TextBlock.Effect>
         </TextBlock>
-        <Border Width="5" CornerRadius="120 120 0 0" Background="#432818" RenderTransformOrigin="0.5 2" Height="85" Margin="0 0 0 100" 
+        <Border Width="5" CornerRadius="120 120 0 0" Background="#5a189a" RenderTransformOrigin="0.5 2" Height="85" Margin="0 0 0 100" 
                 VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Border.RenderTransform>
                 <TransformGroup>

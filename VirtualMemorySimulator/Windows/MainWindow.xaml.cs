@@ -91,6 +91,11 @@ namespace VirtualMemorySimulator.Windows
         private int _betweenOpsDelay = 750;
 
         /// <summary>
+        /// The gradient used for coloring the processes selectors.
+        /// </summary>
+        private LinearGradientBrush _processesBoarderGradient;
+
+        /// <summary>
         /// Initializez the window and maps the event handlers to the events fired by the Machine package.
         /// </summary>
         public MainWindow()
@@ -101,6 +106,12 @@ namespace VirtualMemorySimulator.Windows
             RamGauge.DataContext = GaugeViewModel;
             SetColumnNames();
             FreeRamFramesLabel.Content = $"{_ramFrames} out of {_ramFrames}";
+            _processesBoarderGradient = new LinearGradientBrush(
+                    Color.FromRgb(95, 158, 160),
+                    Color.FromRgb(86, 71, 135),
+                    new Point(0, 0.5),
+                    new Point(1, 1)
+                    );
 
             OS.RamFramesChanged += OnRamFramesChanged;
             OS.OsStateChanged += OnOsStateChanged;
@@ -298,7 +309,7 @@ namespace VirtualMemorySimulator.Windows
                     Border border = (Border)child;
                     if (!border.Name.Equals(processName))
                     {
-                        border.Background = Brushes.CadetBlue;
+                        border.Background = _processesBoarderGradient;
                     }
                     else
                     {
@@ -397,7 +408,7 @@ namespace VirtualMemorySimulator.Windows
             for (int pid = 0; pid < _processCount; pid++)
             {
                 processBorders[pid].IsEnabled = true;
-                processBorders[pid].Background = Brushes.CadetBlue;
+                processBorders[pid].Background = _processesBoarderGradient;
             }
 
             for (int pid = _processCount; pid < MaxProcessCount; pid++)
