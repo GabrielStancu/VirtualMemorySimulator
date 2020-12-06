@@ -7,7 +7,7 @@
         xmlns:gaugeLocal="clr-namespace:VirtualMemorySimulator.Gauge"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="740" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="Width" StateChanged="OnWindowStateChanged" Closed="OnWindowClosed">
+        MaxHeight="740" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="Width" StateChanged="OnWindowStateChanged" Closed="OnWindowClosed">
 
     <StackPanel>
         <Grid x:Name="HeaderGrid" Background="#c1c1c1">
@@ -327,7 +327,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid x:Name="dgProcessPageTable" MaxWidth="692">
+            <DataGrid x:Name="dgProcessPageTable" MaxWidth="692" MaxHeight="389">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Width="*"/>
                     <DataGridTextColumn Width="*"/>
