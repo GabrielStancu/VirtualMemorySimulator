@@ -96,6 +96,11 @@ namespace VirtualMemorySimulator.Windows
         private LinearGradientBrush _processesBoarderGradient;
 
         /// <summary>
+        /// Tells if the first simulation was started. If not, process borders are disabled.
+        /// </summary>
+        private bool _firstSimulationStarted = false;
+
+        /// <summary>
         /// Initializez the window and maps the event handlers to the events fired by the Machine package.
         /// </summary>
         public MainWindow()
@@ -126,10 +131,11 @@ namespace VirtualMemorySimulator.Windows
         {
             int offset = 12;
             int cmdInfoWidth = 370;
-
+           
             Simulate();
             GetProcessPageTableInfo("p0");
             GetProcessesDetails();
+            _firstSimulationStarted = true;
 
             _cmdInfo = new CommandsInfo();
             _cmdInfo.Show();
@@ -149,8 +155,11 @@ namespace VirtualMemorySimulator.Windows
         /// </summary>
         private void OnProcessBorderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string processName = ((Border)sender).Name;
-            GetProcessPageTableInfo(processName);
+            if(_firstSimulationStarted)
+            {
+                string processName = ((Border)sender).Name;
+                GetProcessPageTableInfo(processName);
+            }        
         }
 
         /// <summary>
