@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Machine
+namespace Machine.Components
 {
     /// <summary>
     /// Static class representing the operating system of our simulation unit.

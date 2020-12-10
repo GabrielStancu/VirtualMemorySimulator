@@ -1,5 +1,4 @@
-﻿using Machine;
-using Machine.Components;
+﻿using Machine.Components;
 using Machine.Utilities;
 using System;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace VirtualMemorySimulator.Windows
         /// <summary>
         /// The processes that are run during the simulation.
         /// </summary>
-        private ObservableCollection<Machine.Page> ProcessPageTable;
+        private ObservableCollection<Machine.Components.Page> ProcessPageTable;
 
         /// <summary>
         /// The number of available (not loaded) RAM frames.s
@@ -306,7 +305,7 @@ namespace VirtualMemorySimulator.Windows
         {
             int pid = Int32.Parse(processName[1].ToString());
             PageTable pt = OS.GetRunningProcesses()[pid].PageTable;
-            ProcessPageTable = new ObservableCollection<Machine.Page>(pt.GetPageTableInfo());
+            ProcessPageTable = new ObservableCollection<Machine.Components.Page>(pt.GetPageTableInfo());
             dgProcessPageTable.Columns.Clear();
             dgProcessPageTable.ItemsSource = ProcessPageTable;
             SetColumnNames();

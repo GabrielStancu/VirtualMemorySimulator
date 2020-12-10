@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using Machine;
+using Machine.Components;
 using Machine.Utilities;
 
 namespace VirtualMemorySimulator.Windows

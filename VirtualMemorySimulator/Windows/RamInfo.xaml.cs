@@ -1,4 +1,4 @@
-﻿using Machine;
+﻿using Machine.Components;
 using System.Windows;
 
 namespace VirtualMemorySimulator.Windows

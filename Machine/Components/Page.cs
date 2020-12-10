@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Machine
+namespace Machine.Components
 {
     /// <summary>
     /// A class representing the entry (one page) from the page table.

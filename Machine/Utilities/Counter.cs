@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Machine
+namespace Machine.Utilities
 {
     /// <summary>
     /// Class used to count and return the number of accesses of the memory.

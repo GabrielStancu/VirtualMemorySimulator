@@ -3,7 +3,7 @@ using Machine.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Machine
+namespace Machine.Components
 {
     /// <summary>
     /// Class used to simulate the memory management unit (MMU).

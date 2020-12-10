@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Machine
+namespace Machine.Components
 {
     /// <summary>
     /// Class representing the page table of a process. 
