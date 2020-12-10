@@ -7,7 +7,7 @@
         xmlns:gaugeLocal="clr-namespace:VirtualMemorySimulator.Gauge"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        MaxHeight="740" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="Width" StateChanged="OnWindowStateChanged" Closed="OnWindowClosed">
+        MaxHeight="740" MaxWidth="1168" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" SizeToContent="Width" StateChanged="OnWindowStateChanged" Closed="OnWindowClosed" Title="Main Menu" Icon="HardDiskLogo.png">
 
     <StackPanel>
         <Grid x:Name="HeaderGrid" Background="#c1c1c1">

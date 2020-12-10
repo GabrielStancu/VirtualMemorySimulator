@@ -7,11 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Windows\HardDiskLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Machine\Machine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Windows\HardDiskLogo.png" />
   </ItemGroup>
 
 </Project>

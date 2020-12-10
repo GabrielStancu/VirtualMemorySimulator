@@ -188,6 +188,7 @@ namespace VirtualMemorySimulator.Windows
             _configWindow = new ConfigWindow(_processCount, _totalCommands, _ramFrames, _pagesPerProc, _osDelay, _betweenOpsDelay, MaxProcessCount);
             _configWindow.Closing += OnConfigWindowClosing;
             _configWindow.Show();
+            ConfigButton.IsEnabled = false;
         }
 
         /// <summary>
@@ -204,6 +205,7 @@ namespace VirtualMemorySimulator.Windows
             _betweenOpsDelay = _configWindow.BetweenOpsDelay;
 
             ConfigureProcesses();
+            ConfigButton.IsEnabled = true;
         }
 
         /// <summary>

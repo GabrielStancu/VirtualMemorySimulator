@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VirtualMemorySimulator.Windows"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="ConfigWindow" Height="300" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="Height" Closing="Window_Closing">
+        Title="Configuration" Height="300" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="Height" Closing="Window_Closing" Icon="HardDiskLogo.png">
 
 
      <Grid Background="#cbc0d3">
