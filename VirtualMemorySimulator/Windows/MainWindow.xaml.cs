@@ -136,11 +136,19 @@ namespace VirtualMemorySimulator.Windows
             GetProcessesDetails();
             _firstSimulationStarted = true;
 
+            if(_cmdInfo != null)
+            {
+                _cmdInfo.Close();
+            }
             _cmdInfo = new CommandsInfo();
             _cmdInfo.Show();
             _cmdInfo.Left = this.Left - cmdInfoWidth - offset;
             _cmdInfo.Top = this.Top;
 
+            if(_ramInfo != null)
+            {
+                _ramInfo.Close();
+            }
             _ramInfo = new RamInfo();
             _ramInfo.Show();
             _ramInfo.Left = this.Left + this.Width - offset;
